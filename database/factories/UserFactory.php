@@ -20,7 +20,8 @@ class UserFactory extends Factory
             'username' => $this->faker->userName(),
             'date_of_birth' => $this->faker->dateTimeBetween('1990-01-01-01-01-01','2012-01-01-01-01-01')->format('Y-m-d H:i:s'),
             'phone' => $this->faker->tollFreePhoneNumber(),
-            'phone_verified_at' => now(),            
+            'phone_verified_at' => now(),
+            'city'  => $this->faker->city(),            
             'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password

@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('lastname');
             $table->string('username',100)->unique();
             $table->timestamp('date_of_birth');
+            $table->String('city',100);
             $table->string('phone',15);
             $table->timestamp('phone_verified_at')->nullable();
             $table->timestamp('identity_verified_at')->nullable();
