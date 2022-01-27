@@ -1,28 +1,23 @@
 <template>
 
-<div>
-  <home-admin>
-            <admin-form
-            :dataload="userses" 
-            v-on:datafromthirdondchild="Imagefromcomponent"
-            v-on:datecomponentdate="DateFromDateComponent"
-            >
-            
-            </admin-form>
-</home-admin>
-</div>
+        <div>
+                <c-home-page></c-home-page>
+        
+        </div>   
       
 
 </template>
 <script>
 import homeadmin from './admin/home'
 import adminformlayout from './admin/components/adminformlayout'
+import homepage from './home_page'
 // for components test purpose
 export default {
    
     components:{
         'admin-form': adminformlayout,
         'home-admin': homeadmin,
+        'c-home-page' : homepage
     },
     // props:["notificationbar","menuopen"],
      data() {
@@ -97,7 +92,8 @@ export default {
          
         },
         loadData:function(){
-             axios.get('api/users')
+             
+          axios.get('api/users')
             .then(
                 response=>(this.userses = response.data)
                 //    response=>(console.log(response.data))                  
@@ -106,7 +102,8 @@ export default {
             });
         }
 
-      
+       
+
     },
     mounted(){
         this.loadData()

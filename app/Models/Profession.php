@@ -10,6 +10,6 @@ class Profession extends Model
     use HasFactory;
     public $timestamps = false;
     public function userprofession(){
-        return $this->hasMany(Userprofession::class);
+        return $this->hasMany(Userprofession::class); 
     }
 }

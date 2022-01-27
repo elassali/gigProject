@@ -54,21 +54,23 @@
                     <!-- searchBar start -->
                     <div class="flex items-center lg:pr-6">
                         <base-input
-                        placeholder="Search here"
+                        placeholder="Search by Email"
+                        v-model="inputsearch"
+                        @input="filter"
                         ></base-input>  
 
                     </div>
                     <!-- searchBar Ends -->
 
                     <div class="flex items-center lg:border-l lg:border-r border-gray-300 py-3 lg:py-0 lg:px-6">
-                        <p class="text-base text-gray-600 dark:text-gray-400" id="page-view">Viewing 1 - 20 of 60</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Viewing 1 - 20 of 60</p>
                         <a class="text-gray-600 dark:text-gray-400 ml-2 border-transparent border cursor-pointer rounded" >
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-left" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" />
                                 <polyline points="15 6 9 12 15 18" />
                             </svg>
                         </a>
-                        <a class="text-gray-600 dark:text-gray-400 border-transparent border rounded focus:outline-none cursor-pointer" onclick="pageView(true)">
+                        <a class="text-gray-600 dark:text-gray-400 border-transparent border rounded focus:outline-none cursor-pointer" >
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-right" width="20" height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" />
                                 <polyline points="9 6 15 12 9 18" />
@@ -86,7 +88,7 @@
                                 </svg>
                             </div>
 
-                            <select aria-label="Selected tab" class="focus:outline-none border border-transparent focus:border-gray-800 focus:shadow-outline-gray text-base form-select block w-full py-2 px-2 xl:px-3 rounded text-gray-600 dark:text-gray-400 appearance-none bg-transparent">
+                            <select aria-label="Selected tab" class="focus:outline-none border border-transparent focus:border-gray-800 focus:shadow-outline-gray text-base form-select block w-full py-1 px-2 xl:px-3 rounded text-gray-600 dark:text-gray-400 appearance-none bg-transparent">
                                 <option>List View</option>
                                 <option>Grid View</option>
                             </select>
@@ -94,7 +96,7 @@
                     </div>
 
                     <div class="lg:ml-6 flex items-center">
-                        <button class="bg-gray-200 transition duration-150 ease-in-out focus:outline-none border border-transparent focus:border-gray-800 focus:shadow-outline-gray hover:bg-gray-300 rounded text-indigo-700 px-5 h-8 flex items-center text-sm">Download</button>
+                        <button @clik="testemthod()" class="bg-gray-200 transition duration-150 ease-in-out focus:outline-none border border-transparent focus:border-gray-800 focus:shadow-outline-gray hover:bg-gray-300 rounded text-indigo-700 px-5 h-8 flex items-center text-sm">Download</button>
                         <div class="text-white ml-4 cursor-pointer focus:outline-none border border-transparent focus:border-gray-800 focus:shadow-outline-gray bg-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 w-8 h-8 rounded flex items-center justify-center">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="28" height="28" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" />
@@ -106,18 +108,18 @@
                 </div>
             </div>
             <div class="w-full">
-                <table class="min-w-full bg-white dark:bg-gray-800">
+                <table class="min-w-full bg-white dark:bg-gray-800"> 
                     <thead>
                         <tr class="w-full h-16 border-gray-300 border-b py-8">
-                            <th class="pl-8 text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4">
+                            <th class="pl-8 text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4 text-center">
                                 <input type="checkbox" class="cursor-pointer relative w-5 h-5 border rounded border-gray-400 bg-white dark:bg-gray-800 outline-none"  />
                             </th>
-                            <th class="text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4">Full Name</th>
-                            <th class="text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4">email</th>
-                            <th class="text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4">Contact</th>
-                            <th class="text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4">City</th>
-                            <th class="text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4">Member Since</th>
-                            <th class="text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4">
+                            <th class="text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4 text-center">Full Name</th>
+                            <th class="text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4 text-center">email</th>
+                            <th class="text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4 text-center">Contact</th>
+                            <th class="text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4 text-center">City</th>
+                            <th class="text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4 text-center">Member Since</th>
+                            <th class="text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4 text-center">
                                 <div class="opacity-0 w-2 h-2 rounded-full bg-indigo-400"></div>
                             </th>
                             <td class="text-gray-600 dark:text-gray-400 font-normal pr-8 text-left text-sm tracking-normal leading-4">More</td>
@@ -126,13 +128,14 @@
                     <!-- Table body start --> 
                     <tbody>
                     <!-- data table row start -->
-                        <tr v-for="(item,index) in dataload" class="h-24 border-gray-300 border-b">
-                            <td class="pl-8 pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4">
-                                <input type="checkbox" class="cursor-pointer relative w-5 h-5 border rounded border-gray-400 bg-white dark:bg-gray-800 outline-none" onclick="tableInteract(this)" />
+                        <tr v-for="item in filteredSearch" :key="item.id" class="h-24 border-gray-300 border-b">
+                            <td class="pl-8 pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4 text-center">
+                                <input type="checkbox" class="cursor-pointer relative w-5 h-5 border rounded border-gray-400 bg-white dark:bg-gray-800 outline-none"  /> 
+
                             </td>
-                            <td class="text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4">{{item.name+' '+ item.lastname}}</td>
-                            <td class="text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4">{{item.email}}</td>
-                            <td class="pr-6 whitespace-no-wrap">
+                            <td class="text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4 text-center">{{item.name+' '+ item.lastname}}</td>
+                            <td class="text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4 text-center">{{item.email}}</td>
+                            <td class="pr-6 whitespace-no-wrap text-center">
                                 <div class="flex items-center">
                                     <div class="h-8 w-8">
                                         <img src="https://tuk-cdn.s3.amazonaws.com/assets/components/advance_tables/at_1.png" alt="" class="h-full w-full rounded-full overflow-hidden shadow" />
@@ -140,13 +143,13 @@
                                     <p class="ml-2 text-gray-800 dark:text-gray-100 tracking-normal leading-4 text-sm">{{item.phone}}</p>
                                 </div>
                             </td>
-                            <td class="text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4">{{item.city}}</td>
-                            <td class="text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4">{{item.created_at}}</td>
-                            <td class="pr-6">
+                            <td class=" text-center text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4">{{item.city}}</td>
+                            <td class=" text-center text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4">{{item.created_at}}</td>
+                            <td class="pr-6 ">
                                 <div class="w-2 h-2 rounded-full bg-indigo-400"></div>
                             </td>
                             <td class="pr-8 relative">
-                                <div :class="[ moreaction == index ? 'dropdown-content mt-8 absolute left-0 -ml-12 shadow-md z-10  w-32' : 'hidden']">
+                                <div :class="[ moreaction == item.id ? 'dropdown-content mt-8 absolute left-0 -ml-12 shadow-md z-10  w-32' : 'hidden']">
                                     <ul class="bg-white dark:bg-gray-800 shadow rounded py-1">
                                         <li class="cursor-pointer text-gray-600 dark:text-gray-400 text-sm leading-3 tracking-normal py-3 hover:bg-indigo-700 hover:text-white px-3 font-normal">Edit</li>
                                         <li class="cursor-pointer text-gray-600 dark:text-gray-400 text-sm leading-3 tracking-normal py-3 hover:bg-indigo-700 hover:text-white px-3 font-normal">Delete</li>
@@ -154,7 +157,7 @@
                                     </ul>
                                 </div>
                                 <button 
-                                v-on:click="actiontoggle(index)"
+                                v-on:click="actiontoggle(item.id)"
                                 class="text-gray-500 rounded cursor-pointer border border-transparent focus:outline-none"
                                 >
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-dots-vertical dropbtn" width="28" height="28" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -167,7 +170,7 @@
                             </td>
                         </tr>
                     <!-- data table row start -->
-
+                   
                     
                     </tbody>
                 </table>
@@ -187,14 +190,23 @@
 <script>
 import baseinput from './inputs/baseinput'
 export default {
-    props:["dataload"],
+    props:{
+        dataload:{
+            type:Array,
+        }
+    },
     components:{
         'base-input': baseinput
     },
     data(){
         return{
             moreaction:undefined,
-            ismoreactionopen:undefined
+            ismoreactionopen:undefined,
+            filteredSearch:{
+                type:Array,
+                default:this.dataload
+            },
+            inputsearch:""
         }
     },
     methods:{
@@ -210,7 +222,30 @@ export default {
             }
                 
               
+        },    
+        testemthod:function(){
+          
         }
-    }
+    },
+    computed:{
+        filter:function(){
+            
+             this.filteredSearch = this.dataload.filter(item => item.email.indexOf(this.inputsearch) > -1)
+            
+        }
+    },
+ 
+    
+    mounted(){
+        //  
+        // console.log(this.dataload.length)
+        this.testemthod();
+        // console.log(this.filteredSearch.length)
+         window.addEventListener('load', () => {
+            this.filteredSearch = this.dataload
+          })
+        
+    },
 }
+    
 </script>
