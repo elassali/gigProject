@@ -1,13 +1,16 @@
 require('./bootstrap');
 
-import Vue from 'vue';
-import AppApp from '../vue/app'
+import Alpine from 'alpinejs';
+window.Alpine = Alpine;
 
-const App = new Vue({
+Alpine.start();
+window.Vue = require('vue').default;
+
+import App from '../vue/app';
+
+const app = new Vue({
     el:"#app",
     components:{
-        AppApp
+        'gig-app':App
     }
 })
-
-

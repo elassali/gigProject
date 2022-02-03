@@ -1,7 +1,15 @@
 <template>
 
         <div>
-                <c-home-page></c-home-page>
+                <template v-if="islogedin">
+                        <c-userheader></c-userheader>
+                </template>
+                <template v-esle>            
+                        <c-header></c-header>
+                </template>
+               <c-home-page
+               >
+               </c-home-page> 
         
         </div>   
       
@@ -11,19 +19,23 @@
 import homeadmin from './admin/home'
 import adminformlayout from './admin/components/adminformlayout'
 import homepage from './home_page'
+import indexheader from "./components/index/header"
+import userheader from "./components/userdashboard/header"
 // for components test purpose
 export default {
    
     components:{
         'admin-form': adminformlayout,
         'home-admin': homeadmin,
-        'c-home-page' : homepage
+        'c-home-page' : homepage,
+        'c-header' : indexheader,
+        'c-userheader' : userheader
     },
     // props:["notificationbar","menuopen"],
      data() {
         return {
               user:{
-                name:{
+                name:{ 
                     inputType:"text",
                     data:"",
                     label:"First name",
@@ -41,12 +53,6 @@ export default {
                     label:"Email",
                     colSpace:"md:col-span-3"
                 },
-                password:{
-                    inputType:"password",
-                    data:"",
-                    label:"Password",
-                    colSpace:"md:col-span-2"
-                },
                 city:{
                     inputType:"text", 
                     data:"",
@@ -59,15 +65,9 @@ export default {
                     label:"Date of birth",
                     colSpace:"md:col-span-2"
                 },
-                image:{
-                    inputType:"file",
-                    data:"",
-                    label:"Upload Your image",
-                    colSpace:"md:col-span-5"
-                }
-
               },
-              userses:[]
+              userses:[],
+              islogedin:undefined,
             // ! ====================================>
               
         };
@@ -93,20 +93,24 @@ export default {
         },
         loadData:function(){
              
-          axios.get('api/users')
+          axios.get('api/users') 
             .then(
                 response=>(this.userses = response.data)
                 //    response=>(console.log(response.data))                  
             ).catch(function(error){
                 console.log(error)
             });
-        }
+        },
+     
 
        
 
     },
     mounted(){
-        this.loadData()
+        axios.get('api/check').then(
+           response => ( this.islogedin = response.data.isconnected)
+
+        )
     }
  
 }

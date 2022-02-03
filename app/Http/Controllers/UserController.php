@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Carbon;
+// to remove after 
+use App\Models\Offer;
+use Illuminate\Support\Facades\Auth;
+
 
 class UserController extends Controller
 {
@@ -15,8 +19,20 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
-        return $users;
+        return  User::all();
+        // $users = User::findOrFail(1);
+        // return [
+        //     'id' => $users->id,
+        //     'firstname' => $users->name,
+        //     'lastname' => $users->lastname,
+        //     'dateofbirth' => $users->date_of_birth,
+        //     'phone' => $users->username,
+        //     'adress' => $users->city,
+        // ];
+
+     
+
+
 
     }
 

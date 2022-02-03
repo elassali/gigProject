@@ -2,9 +2,7 @@
                 <!-- opperation page Start --> 
                   <div class="container"> 
                     
-                        <div class="w-full h-full rounded">
-                            
-                                
+                        <div class="w-full h-full rounded">     
                                 <div class="w-full bg-gray-200">
                             <div class="mx-auto container bg-white dark:bg-gray-800 dark:bg-gray-800 shadow rounded">
                                 <div class="flex flex-col lg:flex-row p-4 lg:p-8 justify-between items-start lg:items-stretch w-full">
@@ -48,7 +46,7 @@
                                                     <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
                                                 </svg>
                                             </a>
-                       </div>
+                               </div>
                 </div>
                 <div class="w-full lg:w-2/3 flex flex-col lg:flex-row items-start lg:items-center justify-end">
                     <!-- searchBar start -->
@@ -56,7 +54,7 @@
                         <base-input
                         placeholder="Search by Email"
                         v-model="inputsearch"
-                        @input="filter"
+                        @input="filter()"
                         ></base-input>  
 
                     </div>
@@ -175,26 +173,20 @@
                     </tbody>
                 </table>
             </div>
+            
+
         </div>
     </div>
-                            
-                            
-            
-                            
-                        </div>
+                                            
+ </div>
 
+</div><!-- opperation page End -->  
 
-
-                    </div><!-- opperation page End -->  
 </template>
 <script>
 import baseinput from './inputs/baseinput'
 export default {
-    props:{
-        dataload:{
-            type:Array,
-        }
-    },
+    props:["dataload"],
     components:{
         'base-input': baseinput
     },
@@ -229,9 +221,7 @@ export default {
     },
     computed:{
         filter:function(){
-            
-             this.filteredSearch = this.dataload.filter(item => item.email.indexOf(this.inputsearch) > -1)
-            
+             this.filteredSearch = Object.values(this.dataload).filter(item => item.email.indexOf(this.inputsearch) > -1) 
         }
     },
  

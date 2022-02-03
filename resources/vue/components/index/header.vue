@@ -82,8 +82,8 @@
             </div>
 
             <div class="mt-4">
-                <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200" for="LoggingEmailAddress">Email Address</label>
-                <input id="LoggingEmailAddress" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" type="email">
+                <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200">Email Address</label>
+                <input  class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" type="email">
             </div>
 
             <div class="mt-4">
@@ -196,15 +196,20 @@
 </template>
 <script>
 export default {
-   props:["isloginopen","isregisteropen"],
+   data(){
+       return{
+           isloginopen : false,
+           isregisteropen: false
+       }
+   },
     methods:{
         isopen:function(){
             this.isregisteropen = false;
-            return this.isloginopen = !this.isloginopen;
+            this.isloginopen = !this.isloginopen;
         },
         isregisteropened:function(){
             this.isloginopen = false;;
-            return this.isregisteropen = !this.isregisteropen;
+            this.isregisteropen = !this.isregisteropen;
         }
     }
     

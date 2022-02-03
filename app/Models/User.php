@@ -41,6 +41,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'created_at' => 'datetime:d-F-Y',
+        'date_of_birth' => 'datetime:d-F-Y'
     ];
 
     public function userprofession(){

@@ -1,24 +1,28 @@
 <template>
- <div class="h-16 z-10">
+ <div 
+v-loosefocus="truenitfalse"
+ class="h-16 z-0 clickdetection" >
                 <label :for="label">{{label}}</label> 
                 <div class="relative">
                 <div class="flex absolute inset-y-0 w-full left-0 items-center pl-3 pointer-events-none">
                     <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
                 </div>
+                <!--  testing area-->
                 <input
                 v-bind="$attrs"
-                @click="iscalenderopen=!iscalenderopen"
+                @click="iscalenderopen = !iscalenderopen"
                 v-bind:value="value"
                 v-on:input="$emit('dateFromDateComponent',value)" 
                 type="text" 
-                :placeholder="dateobject.currentdate.toLocaleString('en-NZ',{year:'numeric',month:'numeric',day:'numeric'})"
-                class="mt-1 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                
+                :placeholder="dateobject.currentdate ? dateobject.currentdate.toLocaleString('en-NZ',{year:'numeric',month:'numeric',day:'numeric'}) : ''"
+                :class="styleclass"
                 id="inputdate"
                 >
                 </div>
                 <!-- date time piker -->
-                <div :class="[iscalenderopen ? 'datepicker-picker inline-block rounded-lg bg-white dark:bg-gray-700 shadow-lg p-4' : 'hidden']">
+                <div 
+                v-bind="$attrs"       
+                :class="[iscalenderopen   ? 'datepicker-picker z-auto inline-block  rounded-lg bg-white dark:bg-gray-700 shadow-lg p-4' : 'hidden']">
                 <div class="datepicker-header">
                     <div
                     class="datepicker-title bg-white dark:bg-gray-700 dark:text-white px-2 py-3 text-center font-semibold"
@@ -141,13 +145,18 @@ export default {
             type:String,
             default:''
         },
+        styleclass:{
+            type:String,
+            default:'mt-1 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded h-8 focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-5000'
+        },
+        
     },
 
     data(){
         return{
           dateobject : {},
-          iscalenderopen: true,
-            value:'' 
+          iscalenderopen: false,
+          value:'',
           
         }
     },
@@ -173,13 +182,13 @@ export default {
 
             },
             deep: true
-        }
+        },
+      
     },
   
     methods:{
             loadCalander(nextpreviousmonth = 0) {
             let currentdate = new Date();
-            
             let date = {
                         todayday:currentdate.getDate(),
                         todaymonth:currentdate.getMonth() + nextpreviousmonth,
@@ -220,14 +229,37 @@ export default {
                 this.iscalenderopen = false
             },
             // ! -----------------------------------------------
-            senddatetoparrent:function(){
-                return 
-            }
+          truenitfalse:function(){
+            this.iscalenderopen = false
+
+          }
+         
+            
+    
 
     },
     mounted(){
        this.dateobject = this.loadCalander()
        
+    },
+    directives:{
+        loosefocus:{
+            bind: function (el, binding, vnode) {
+                el.clickOutsideEvent = function (event) {
+                // here I check that click was outside the el and his children
+                if (!(el == event.target || el.contains(event.target))) {
+                    // and if it did, call method provided in attribute value
+                  
+                    vnode.context[binding.expression](event);
+                }
+                };
+                document.body.addEventListener('click', el.clickOutsideEvent)
+            },
+            unbind: function (el) {
+                document.body.removeEventListener('click', el.clickOutsideEvent)
+            },
+        }
+
     }
 
 }

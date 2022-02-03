@@ -7,19 +7,10 @@
 
                         
                          
-       
-
-        <data-view
-        :dataload="dataload"
-        >
-        </data-view> 
-
-
-    
+      
                                
 
-                              
-                   
+                                         
 
     
   </div>
