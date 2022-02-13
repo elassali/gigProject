@@ -21,6 +21,7 @@ class OfferdetailFactory extends Factory
         'for_price' => random_int(500,1000),
         'for_date' => now()->addDays(random_int(1,10)),
         'expired_at' => now()->addDays(random_int(10,12)),
+        'location_id' => random_int(1,100),
         ];
     }
     public function expired()

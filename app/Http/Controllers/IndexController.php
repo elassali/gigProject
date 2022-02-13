@@ -16,17 +16,6 @@ class IndexController extends Controller
     public function index()
     {
 
-        if(Auth::check()) {
-            return[
-                'isconnected' => true
-            ];
-            
-        }
-        else{
-            return [
-                'isconnected' => false
-            ];
-        }
     }
 
     /**

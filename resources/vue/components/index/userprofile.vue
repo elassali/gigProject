@@ -28,7 +28,7 @@
                                     </a>
                         </div>
                         <div class=" absolute  left-2/4 -translate-x-1/2 -top-full z-10 mb-4">
-                            <img class="rounded-full h-36" src="https://cultivatedculture.com/wp-content/uploads/2019/12/LinkedIn-Profile-Picture-Example-Madeline-Mann.jpeg">
+                            <img class="rounded-full h-36" src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260">
                             
                         </div>
                         <div class="items-start flex pt-2">

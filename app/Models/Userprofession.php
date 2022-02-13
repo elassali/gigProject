@@ -15,4 +15,7 @@ class Userprofession extends Model
     public function profession(){
         return $this->belongsTo(Profession::class);
     }
+    public function professions(){
+        return $this->hasOne(Profession::class,'profession_id','id');
+    }
 }

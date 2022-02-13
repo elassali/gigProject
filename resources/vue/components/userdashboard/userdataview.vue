@@ -64,7 +64,7 @@
 
                                             <div class="flex items-center">
                                                 <div
-                                                @click="createjobform = !createjobform"
+                                                @click="createjobform = true"
                                                  class="text-white ml-4 cursor-pointer focus:outline-none border border-transparent focus:border-gray-800 focus:shadow-outline-gray bg-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 w-8 h-8 rounded flex items-center justify-center">
                                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-plus" width="28" height="28" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                         <path stroke="none" d="M0 0h24v24H0z" />
@@ -80,7 +80,7 @@
                         <thead>
                             <tr class="w-full h-16 border-gray-300 border-b py-8">
                                 <th class="pl-8 text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4 text-center">
-                                    <input type="checkbox" class="cursor-pointer relative w-5 h-5 border rounded border-gray-400 bg-white dark:bg-gray-800 outline-none"  />
+                                    Quick status edit
                                 </th>
                                 <th class="text-gray-600 dark:text-gray-400 font-semibold pr-6 text-left text-sm tracking-normal leading-4 text-center">I need</th>
                                 <th class="text-gray-600 dark:text-gray-400 font-semibold  pr-6 text-left text-sm tracking-normal leading-4 text-center">Job Date</th>
@@ -96,26 +96,31 @@
                         <!-- Table body start --> 
                         <tbody>
                         <!-- data table row start -->
-                            <tr v-for="item in dataload" :key="item.id" class="h-24 border-gray-300 border-b">
-                                <td class="pl-8 pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4 text-center">
-                                    <input type="checkbox" class="cursor-pointer relative w-5 h-5 border rounded border-gray-400 bg-white dark:bg-gray-800 outline-none"  /> 
+                            <tr v-for="item in userjoboffers" :key="item.id" class="h-24 border-gray-300 border-b">
+                                <td
+                                @click="quickedit(item.id)"
+                                class="pl-8 pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4 text-center">
+                                   <c-togglecheckbox
+                                   v-model="item.offer_status"
+                                   >
+                                   </c-togglecheckbox>
 
                                 </td>
-                                <td class="text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4 text-center">{{item.name+' '+ item.lastname}}</td>
-                                <td class="text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4 text-center">{{item.email}}</td>
+                                <td class="text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4 text-center">{{item.profession_name}}</td>
+                                <td class="text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4 text-center">{{item.job_date}}</td>
                                 <td class="pr-6 whitespace-no-wrap text-center">
-                                        {{item.phone}}
+                                        {{item.job_expire}}
                                 </td>
-                                <td class=" text-center text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4">{{item.city}}</td>
-                                <td class=" text-center text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4">{{item.created_at}}</td>
+                                <td class=" text-center text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4">{{item.city.title}}</td>
+                                <td class=" text-center text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4">{{item.offer_status ? "Running" : "Stopped"}}</td>
                                 <td class="pr-6 ">
-                                    <div class="w-2 h-2 rounded-full bg-indigo-400"></div>
+                                    <div :class="[item.offer_status ? 'bg-green-600' : 'bg-red-600' , 'w-2 h-2 rounded-full']"></div>
                                 </td>
                                 <td class="pr-8 relative">
                                     <div :class="[ moreaction == item.id ? 'dropdown-content mt-8 absolute left-0 -ml-12 shadow-md z-10  w-32' : 'hidden']">
                                         <ul class="bg-white dark:bg-gray-800 shadow rounded py-1">
                                             <li class="cursor-pointer text-gray-600 dark:text-gray-400 text-sm leading-3 tracking-normal py-3 hover:bg-indigo-700 hover:text-white px-3 font-normal">Edit</li>
-                                            <li class="cursor-pointer text-gray-600 dark:text-gray-400 text-sm leading-3 tracking-normal py-3 hover:bg-indigo-700 hover:text-white px-3 font-normal">Delete</li>
+                                            <li @click="deleteOffer(item.id)" class="cursor-pointer text-gray-600 dark:text-gray-400 text-sm leading-3 tracking-normal py-3 hover:bg-indigo-700 hover:text-white px-3 font-normal">Delete</li>
                                             <li class="cursor-pointer text-gray-600 dark:text-gray-400 text-sm leading-3 tracking-normal py-3 hover:bg-indigo-700 hover:text-white px-3 font-normal">Details</li>
                                         </ul>
                                     </div>
@@ -133,11 +138,17 @@
                                 </td>
                             </tr>
                         <!-- data table row start -->
-                    
+       
                         
                         </tbody>
                     </table>
                 </div>
+
+
+
+
+
+
         <!-- create job component -->
         <div :class="createjobform ?  'absolute top-0 left-2/4 -translate-x-2/4 min-h-screen rounded-3xl flex flex-col justify-center z-10' : 'hidden'">
         <div class="relative sm:max-w-xl sm:mx-auto">
@@ -152,42 +163,89 @@
                 </div>
                 <div class="divide-y divide-gray-200">
                 <div class="py-8 text-base leading-6 space-y-4 text-gray-700 sm:text-lg sm:leading-7">
-                   <div class="flex flex-col">
-             
-                        </div>
-                        <div class="flex flex-col">
-                        <c-baseinput
-                        label="love"
-                        >
-                        </c-baseinput>
-                        </div>
-                        
+                            <div class="flex flex-col ">
+                                <c-baseinput
+                                label="I would pay"
+                                placeholder="I would pay"
+                                v-model="jobinfoobject.price"
+                                >
+                                </c-baseinput>
+                            </div>
+              
+                            <div class="flex items-center space-x-4">
+                                <div class="flex flex-col ">
+                                    <c-baseinput
+                                    label="Title"
+                                    placeholder="I Need A "
+                                    disabled
+                                    >
+                                    </c-baseinput>
+                                </div>
+                                <div class="flex flex-col">
+                                    <c-baseselect
+                                    :selections="professionslist"
+                                    v-model="jobinfoobject.profession_title"
+                                    label="Select Profession"
+                                    v-on:sendittoparent="getprofessiontitle"
+                                    :isdesabeld="true"
+                                    placeholder="select what you need"
+                                    >
+                                    </c-baseselect>
+                                </div>
+                            </div>
                          <div class="flex items-center space-x-4">
                             <div class="flex flex-col">
                                 <c-basedatepicker
                                 label="Date Of Job"
+                                v-on:dateComponentvalue="jobdatevalue"
                                 >
                                 </c-basedatepicker>
                             </div>
                             <div class="flex flex-col">
                                 <c-basedatepicker
                                 label="Expire at"
+                                v-on:dateComponentvalue="expiredatevalue"
                                 >
                                 </c-basedatepicker>
                             </div>
                         </div>
                         <div class="flex flex-col">
-                        <label class="leading-loose">Event Description</label>
-                            <textarea required="" name="message" id="" class="w-full min-h-[100px] max-h-[300px] h-28 appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg  py-4 px-4 resize-none" placeholder="Enter your comapny info" spellcheck="false"></textarea>            </div>
+                                  <c-baseselect
+                                    :selections="cities"
+                                    label="City"
+                                    :isdesabeld="true"
+                                    v-on:sendittoparent="getcity"
+                                    placeholder="select City"
+                                    >
+                                    </c-baseselect>
+                        </div>
+                        <label class="leading-loose">Description</label>
+                        <textarea v-model="jobinfoobject.description" class="w-full min-h-[100px] max-h-[300px] h-28 appearance-none block w-full bg-grey-lighter text-grey-darker border border-grey-lighter rounded-lg  py-4 px-4 resize-none" placeholder="Enter your comapny info" spellcheck="false"></textarea>
+
+                        <!-- toglle button -->
+                        <div 
+                        @click="jobinfoobject.offer_privacy = !jobinfoobject.offer_privacy" 
+                        class="flex flex-col w-fit">
+                               <c-togglecheckbox                               
+                               v-model="jobinfoobject.offer_privacy"
+                               ></c-togglecheckbox>
+                        </div>
+
+
+                    </div>
                 </div>
                 </div>
                 <div class="pt-4 flex items-center space-x-4">
                     <button
-                     @click="createjobform = !createjobform"
+                     @click="createjobform = false"
                      class="flex justify-center items-center w-full text-gray-900 px-4 py-3 rounded-md focus:outline-none">
                         <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg> Cancel
                     </button>
-                    <button class="bg-blue-500 flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none">Create</button>
+                    <button
+                    @click="createjob"
+                     class="bg-blue-500 flex justify-center items-center w-full text-white px-4 py-3 rounded-md focus:outline-none">
+                     Create
+                     </button>
                 </div>
                 </div>
             </div>
@@ -195,6 +253,7 @@
         </div>
         </div>
         <!-- create job component end-->     
+      
 </div>
 
         
@@ -207,17 +266,38 @@
 <script>
 import baseinput from '../../admin/components/inputs/baseinput'
 import basedatepicker from '../../admin/components/inputs/basedatetime'
+import baseselectinput from '../../admin/components/inputs/baseselectinput'
+import togglecheck from '../../admin/components/checkboxs/toggle'
 export default {
-    props:["dataload"],
     components:{
         'c-baseinput': baseinput,
-        'c-basedatepicker' : basedatepicker
+        'c-basedatepicker' : basedatepicker,
+        'c-baseselect' : baseselectinput,
+        'c-togglecheckbox' : togglecheck
     },
     data(){
         return{
-            moreaction:false,
+            moreaction:false,//? data view stage
             ismoreactionopen:undefined,
             createjobform: false,
+            userjoboffers:undefined,
+            // * wrap info in an object
+            jobinfoobject:{
+                title:undefined,
+                price:undefined,
+                description:undefined,
+                job_date:undefined,
+                expire_date:undefined,
+                profession_title:undefined,
+                profession_id:undefined,
+                city_title:undefined,
+                city_id:undefined,
+                offer_privacy:true
+            },
+            // * get all profession for creation
+            professionslist:undefined,
+            // * get all cities fro creation
+            cities:undefined
         }
     },
     methods:{
@@ -231,12 +311,71 @@ export default {
                 this.moreaction = val
                 this.ismoreactionopen =  val
             }     
+        },
+        // ? profession title from select component
+        getprofessiontitle:function(value){
+            this.jobinfoobject.profession_title = value[0]
+            this.jobinfoobject.profession_id = value[1]
+
+        },
+             // ? city titlefrom select component
+        getcity:function(value){
+            this.jobinfoobject.city_title = value[0]
+            this.jobinfoobject.city_id = value[1]
+        },
+        // ? get job date value from component
+        jobdatevalue:function(value){
+            this.jobinfoobject.job_date = value
+        },
+        // ? get expire date value from component
+        expiredatevalue:function(value){
+            this.jobinfoobject.expire_date = value 
+        },
+        // * User job offers starts
+        // ? useroffers data view
+        getuserjoboffers:function(){
+            axios.get('/api/my-Job-offers').then(response => this.userjoboffers = response.data);
         },   
+        // ? Create Offer toggle + load profession if opened
+        loadallprofession:function(){
+            axios.get('/api/listprofessions').then(response => [this.professionslist = response.data])
+           
+        },
+        loadcities:function(){
+            axios.get('/api/loadcities').then(response => this.cities = response.data)
+        },
+        // ? create new offre
+        createjob:function(){
+            axios.post('/api/create-job',this.jobinfoobject).then(response => console.log(response))
+        },
+        // ? quick edit status
+        quickedit:function(value){
+            this.userjoboffers.find( ({id}) => id === value).offer_status = !this.userjoboffers.find( ({id}) => id === value).offer_status
+            
+            axios.put('/api/quick-status-edit',{
+                offer_status : value
+            }).then(response => console.log(response.data)) 
+    
+        },
+        // ? delete Offer and it's detail
+        deleteOffer:function(value){
+            axios.delete('/api/offer-delete',{ 
+                data:{offer_id:value}
+            }).then(response => console.log(response))
+            let data = this.userjoboffers.find( ({id}) => id === value).offer_status = !this.userjoboffers.find( ({id}) => id === value)
+            console.log(this.joboffers.findIndex(data))
+            
+        }
+
+        // * User job offers ENDs   
     },
  
     
     mounted(){
         
+        this.getuserjoboffers()
+        this.loadallprofession()
+        this.loadcities()
         
     },
 }

@@ -7,7 +7,7 @@
                         <div class="flex items-center justify-between">
                              <!-- site logo-->
                             <div class="flex items-center">
-                                <a class="text-2xl font-bold text-gray-800 transition-colors duration-200 transform dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300" href="#">Brand</a>
+                                <router-link :to="{name:'index' }" class="text-2xl font-bold text-gray-800 transition-colors duration-200 transform dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300">Brand</router-link>
                             </div>
 
                                <!-- Mobile menu button -->
@@ -150,7 +150,7 @@
                                                 Help
                                             </span>
                                         </a>
-                                        <a href="#" class="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
+                                        <a @click="signOut()" class="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
                                             <svg class="w-5 h-5 mx-1" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M19 21H10C8.89543 21 8 20.1046 8 19V15H10V19H19V5H10V9H8V5C8 3.89543 8.89543 3 10 3H19C20.1046 3 21 3.89543 21 5V19C21 20.1046 20.1046 21 19 21ZM12 16V13H3V11H12V8L17 12L12 16Z" fill="currentColor"></path>
                                             </svg>
@@ -306,6 +306,12 @@ export default {
         },
         isusermenuopen:function(){
             this.menuopen = !this.menuopen;
+        },
+        signOut:function(){
+            console.log("you are about to signout.....")
+            axios.get('api/signout')
+                 .then(response => response.status == 200 ? this.$router.push({ name: 'index'}): console.log("error") )
+                 .catch(e => console.log(e))
         }
     
     }

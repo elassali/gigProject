@@ -1,33 +1,31 @@
 <template>
 
         <div>
-                <template v-if="islogedin">
-                        <c-userheader></c-userheader>
-                </template>
-                <template v-esle>            
-                        <c-header></c-header>
-                </template>
-               <c-home-page
-               >
-               </c-home-page> 
-        
+            <keep-alive>
+                <c-userheader v-if="ckeckiflogeid"></c-userheader>
+                
+                
+            </keep-alive>
+                <c-header v-if="!ckeckiflogeid"></c-header>
+                            
+            <router-view></router-view>
+
         </div>   
       
 
 </template>
 <script>
-import homeadmin from './admin/home'
-import adminformlayout from './admin/components/adminformlayout'
-import homepage from './home_page'
+// import homeadmin from './admin/home'
+// import adminformlayout from './admin/components/adminformlayout'
+// import homepage from './home_page'
 import indexheader from "./components/index/header"
 import userheader from "./components/userdashboard/header"
 // for components test purpose
 export default {
-   
     components:{
-        'admin-form': adminformlayout,
-        'home-admin': homeadmin,
-        'c-home-page' : homepage,
+        // 'admin-form': adminformlayout,
+        // 'home-admin': homeadmin,
+        // 'c-home-page' : homepage,
         'c-header' : indexheader,
         'c-userheader' : userheader
     },
@@ -67,7 +65,8 @@ export default {
                 },
               },
               userses:[],
-              islogedin:undefined,
+              ckeckiflogeid:this.checkifuserlogedin()
+  
             // ! ====================================>
               
         };
@@ -101,17 +100,22 @@ export default {
                 console.log(error)
             });
         },
-     
-
-       
+        checkifuserlogedin:function(){
+            axios.get('api/check')
+                 .then(response => [this.ckeckiflogeid = response.data.islogedin] )   
+        },
 
     },
-    mounted(){
-        axios.get('api/check').then(
-           response => ( this.islogedin = response.data.isconnected)
+    watch:{
+        ckeckiflogeid:{
+        handler:function(){
+            this.checkifuserlogedin()
+        },
+        deep:true
+        }
 
-        )
-    }
- 
+    },
+   
+
 }
 </script>

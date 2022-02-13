@@ -81,8 +81,8 @@
 </template>
 
 <script>
-
 export default {
+ 
    props:["users"],
    data(){
        return{

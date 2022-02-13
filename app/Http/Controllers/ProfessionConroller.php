@@ -14,8 +14,10 @@ class ProfessionConroller extends Controller
      */
     public function index()
     {
-        return Profession::all();
+        $professions =  Profession::all(); 
+        return $professions;
     }
+ 
 
     /**
      * Show the form for creating a new resource.

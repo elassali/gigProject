@@ -15,14 +15,14 @@ class CreateOfferdetailsTable extends Migration
     {
         Schema::create('offerdetails', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('offer_id')->references('id')->on('offers');
+            $table->foreignId('offer_id')->references('id')->on('offers')->onDelete('cascade');//->unique() cause one offer has only one detail;
             $table->foreignId('profession_id')->constrained();
-            $table->string('offer_title',50);
+            $table->string('offer_title',50)->nullable();
             $table->mediumText('description');
             $table->integer('for_price');
             $table->timestamp('for_date');
-            $table->timestamp('expired_at');        
-            $table->timestamps();
+            $table->timestamp('expired_at');
+            $table->foreignId('location_id')->references('id')->on('cities');        
         });
     }
 

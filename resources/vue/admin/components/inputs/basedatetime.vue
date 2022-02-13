@@ -11,14 +11,13 @@ v-loosefocus="truenitfalse"
                 <input
                 v-bind="$attrs"
                 @click="iscalenderopen = !iscalenderopen"
-                v-bind:value="value"
-                v-on:input="$emit('dateFromDateComponent',value)" 
+                v-bind:value="value" 
+                v-on:input="$emit('input',$event.target.value)" 
                 type="text" 
-                :placeholder="dateobject.currentdate ? dateobject.currentdate.toLocaleString('en-NZ',{year:'numeric',month:'numeric',day:'numeric'}) : ''"
+                :placeholder="dateobject.currentdate ? dateobject.currentdate.toLocaleString('en-NZ',{year:'numeric',month:'long',day:'numeric'}) : ''"
                 :class="styleclass"
-                id="inputdate"
                 >
-                </div>
+                </div> 
                 <!-- date time piker -->
                 <div 
                 v-bind="$attrs"       
@@ -149,14 +148,15 @@ export default {
             type:String,
             default:'mt-1 bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded h-8 focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-5000'
         },
-        
+        // value:'',
     },
 
     data(){
         return{
           dateobject : {},
           iscalenderopen: false,
-          value:'',
+          value:undefined
+          
           
         }
     },
@@ -242,6 +242,7 @@ export default {
        this.dateobject = this.loadCalander()
        
     },
+    // ? used for hide select date div when click outside of it
     directives:{
         loosefocus:{
             bind: function (el, binding, vnode) {

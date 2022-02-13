@@ -7,7 +7,7 @@
                 <div class="flex items-center justify-between">
                 <!-- site logo-->
                     <div class="flex items-center">
-                        <a class="text-2xl font-bold text-gray-800 transition-colors duration-200 transform dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300" href="#">Brand</a>
+                        <router-link :to="{name: 'index' }" class="text-2xl font-bold text-gray-800 transition-colors duration-200 transform dark:text-white lg:text-3xl hover:text-gray-700 dark:hover:text-gray-300" href="#">Brand</router-link>
                     </div>
 
                     <!-- Mobile menu button -->
@@ -32,8 +32,8 @@
 
                 <div class="items-center md:flex">
                     <div class="flex items-center py-2 -mx-1 md:mx-0">
-                        <a class="block cursor-pointer w-1/2 px-3 py-2 mx-1 text-sm font-medium leading-5 text-center text-white transition-colors duration-200 transform bg-gray-500 rounded-md hover:bg-blue-600 md:mx-2 md:w-auto" v-on:click="isopen()">Login</a>
-                        <a class="block w-1/2 px-3 py-2 mx-1 text-sm font-medium leading-5 text-center text-white transition-colors duration-200 transform bg-gray-500 rounded-md hover:bg-blue-600 md:mx-0 md:w-auto" v-on:click="isregisteropened()">Join free</a>
+                        <a class="block cursor-pointer w-1/2 px-3 py-2 mx-1 text-sm font-medium leading-5 text-center text-white transition-colors duration-200 transform bg-gray-500 rounded-md hover:bg-blue-600 md:mx-2 md:w-auto" v-on:click="isopen(1)">Login</a>
+                        <a class="block w-1/2 px-3 py-2 mx-1 text-sm font-medium leading-5 text-center text-white transition-colors duration-200 transform bg-gray-500 rounded-md hover:bg-blue-600 md:mx-0 md:w-auto" v-on:click="isopen(2)">Join free</a>
                     </div>
                     
                 </div>
@@ -45,14 +45,14 @@
         <!--  Start section -->
           
             <!-- login wraper --> 
-            <div :class="[isloginopen ? 'h-full fixed top-0 left-0  w-full' : 'hidden']">
+            <div :class="[modalopen == 1 ? 'h-full fixed top-0 left-0  w-full z-10' : 'hidden']">
                     <div class="bg-black opacity-25 h-full absolute w-full -z-10"></div>
                      <div class="flex max-w-sm mx-auto mt-16 overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-6/12">
         
         <div class=" relative w-full px-6 py-8 md:px-8">
             <h2 class="text-2xl font-semibold text-center text-gray-700 dark:text-white">Brand</h2>
 
-             <button v-on:click="isopen()" class="top-0 right-0 absolute p-1 transition-colors duration-200 transform rounded-md hover:bg-opacity-25 hover:bg-gray-600 focus:outline-none">
+             <button v-on:click="isopen(-1)" class="top-0 right-0 absolute p-1 transition-colors duration-200 transform rounded-md hover:bg-opacity-25 hover:bg-gray-600 focus:outline-none">
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -83,20 +83,22 @@
 
             <div class="mt-4">
                 <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200">Email Address</label>
-                <input  class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" type="email">
+                <input v-model="email" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" type="email">
             </div>
 
             <div class="mt-4">
                 <div class="flex justify-between">
                     <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200" for="loggingPassword">Password</label>
-                    <a href="#" class="text-xs text-gray-500 dark:text-gray-300 hover:underline">Forget Password?</a>
+                    <a @click="isopen(3)" class="text-xs text-gray-500 dark:text-gray-300 hover:underline cursor-pointer">Forget Password?</a>
                 </div>
 
-                <input id="loggingPassword" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" type="password">
+                <input v-model="password"class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" type="password">
             </div>
 
             <div class="mt-8">
-                <button class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
+                <button 
+                @click="login()"
+                class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded hover:bg-gray-600 focus:outline-none focus:bg-gray-600">
                     Login
                 </button>
             </div>
@@ -104,7 +106,7 @@
             <div class="flex items-center justify-between mt-4">
                 <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
 
-                <a @click="isregisteropened()" class="cursor-pointer text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline">or sign up</a>
+                <a @click="isopen(2)" class="cursor-pointer text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline">or sign up</a>
                 
                 <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
             </div>
@@ -112,15 +114,15 @@
     </div>
                 
             </div>
-                      <!-- register wraper wraper --> 
-            <div :class="[isregisteropen ? 'h-full fixed top-0 left-0  w-full' : 'hidden']">
+            <!-- register wraper wraper --> 
+            <div :class="[modalopen == 2 ? 'h-full fixed top-0 left-0  w-full z-10' : 'hidden']">
                     <div class="bg-black opacity-25 h-full absolute w-full -z-10"></div>
                      <div class="flex max-w-sm mx-auto mt-16 overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-6/12">
         
         <div class=" relative w-full px-6 py-8 md:px-8">
             <h2 class="text-2xl font-semibold text-center text-gray-700 dark:text-white">Brand</h2>
 
-             <button @click="isregisteropened()" class="top-0 right-0 absolute p-1 transition-colors duration-200 transform rounded-md hover:bg-opacity-25 hover:bg-gray-600 focus:outline-none">
+             <button @click="isopen(-1)" class="top-0 right-0 absolute p-1 transition-colors duration-200 transform rounded-md hover:bg-opacity-25 hover:bg-gray-600 focus:outline-none">
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
@@ -150,28 +152,37 @@
             </div>
 
             <div class="mt-4">
-                <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200" for="LoggingEmailAddress">Email</label>
-                <input id="LoggingEmailAddress" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" type="email">
+                <c-baseinput 
+                label="Email"
+                v-model="email"
+                styleclass="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" 
+                >
+                </c-baseinput>
             </div>
 
             <div class="mt-4">
-                <div class="flex justify-between">
-                    <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200" for="loggingusername">Username</label>
-                </div>
-
-                <input  class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" type="text">
+                <c-baseinput 
+                label="Username"
+                v-model="username" 
+                styleclass="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" 
+                >
+                </c-baseinput>
             </div>
 
                 <div class="mt-4">
-                <div class="flex justify-between">
-                    <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200" for="loggingPassword">Password</label>
+                    <c-baseinput 
+                    label="Password"
+                    v-model="password"
+                    styleclass="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" 
+                    type="password"
+                    >
+                    </c-baseinput>            
                 </div>
 
-                <input  class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" type="password">
-            </div>
-
             <div class="mt-8">
-                <button class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded hover:bg-blue-600 focus:outline-none focus:bg-gray-600">
+                <button
+                @click="register()"
+                 class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded hover:bg-blue-600 focus:outline-none focus:bg-gray-600">
                     Sign up
                 </button>
             </div>
@@ -179,14 +190,62 @@
             <div class="flex items-center justify-between mt-4">
                 <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
 
-                <a @click="isopen()" class="cursor-pointer text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline">Or log in</a>
+                <a @click="isopen(1)" class="cursor-pointer text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline">Or log in</a>
                 
                 <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
             </div>
         </div>
     </div>
                 
+  </div>
+     <!-- recover password -->
+     <div :class="modalopen == 3 ? 'h-full fixed top-0 left-0  w-full z-10 ' : 'hidden' ">
+                    <div class="bg-black opacity-25 h-full absolute w-full -z-10"></div>
+                     <div class="flex max-w-sm mx-auto mt-16 overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 lg:max-w-6/12">
+        
+        <div class=" relative w-full px-6 py-8 md:px-8">
+            <h2 class="text-2xl font-semibold text-center text-gray-700 dark:text-white">Brand</h2>
+
+             <button @click="isopen(-1)" class="top-0 right-0 absolute p-1 transition-colors duration-200 transform rounded-md hover:bg-opacity-25 hover:bg-gray-600 focus:outline-none">
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+
+
+
+            <div class="flex items-center justify-between mt-4">
+                <span class="w-1/5 border-b dark:border-gray-600 lg:w-1/4"></span>
+
+                <a href="#" class="text-xs text-center text-gray-500 uppercase dark:text-gray-400 hover:underline">Password Recovery</a>
+
+                <span class="w-1/5 border-b dark:border-gray-400 lg:w-1/4"></span>
             </div>
+
+                <div class="mt-4">
+                <div class="flex justify-between">
+                    <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200" for="loggingPassword">Email</label>
+                </div>
+                <input  class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" type="password">
+            </div>
+
+            <div class="mt-8">
+                <button class="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-gray-700 rounded hover:bg-blue-600 focus:outline-none focus:bg-gray-600">
+                    Send
+                </button>
+            </div>
+            
+            <div class="flex items-center justify-between mt-4">
+                <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
+
+                <a @click="isopen(1)" class="cursor-pointer text-xs text-gray-500 uppercase dark:text-gray-400 hover:underline">Or log in</a>
+                
+                <span class="w-1/5 border-b dark:border-gray-600 md:w-1/4"></span>
+            </div>
+        </div>
+    </div>
+                
+  </div>
         <!--  End section -->
 
    </header>
@@ -195,22 +254,47 @@
 
 </template>
 <script>
+import baseinput from "../../admin/components/inputs/baseinput"
 export default {
+    components:{
+        'c-baseinput' : baseinput
+    },
    data(){
        return{
-           isloginopen : false,
-           isregisteropen: false
+           modalopen : false,
+           email:undefined,
+           password:undefined,
+           username:undefined
        }
    },
     methods:{
-        isopen:function(){
-            this.isregisteropen = false;
-            this.isloginopen = !this.isloginopen;
+        isopen:function(val){
+           
+            this.modalopen = val
         },
-        isregisteropened:function(){
-            this.isloginopen = false;;
-            this.isregisteropen = !this.isregisteropen;
+        login:function(){
+            axios.get('sanctum/csrf-cookie').then(response => {
+                    axios.post('api/login',{
+                    email:this.email,
+                    password:this.password,
+                    })
+                    .then(r => r.status == 200 ?  [this.$router.go(), console.log(r) ] : '')
+                    .catch(e => console.log(e))
+                });
+            
+        },
+        register:function(){
+            axios.post('/api/register',{
+                    username:this.username,
+                    email: this.email,
+                    password:this.password
+                })
+                .then(
+                    response => console.log(response)
+                )
+                .catch(e => console.log(e)) 
         }
+   
     }
     
 }

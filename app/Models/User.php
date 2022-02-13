@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
@@ -21,6 +22,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'username',
     ];
 
     /**
@@ -43,17 +45,17 @@ class User extends Authenticatable
         'created_at' => 'datetime:d-F-Y',
         'date_of_birth' => 'datetime:d-F-Y'
     ];
-
-    public function userprofession(){
-        return $this->hasMany(Userprofession::class);
-    }
+ 
+    public function userprofession(){ 
+        return $this->belongsToMany(Profession::class,'userprofessions')->withPivot('experience');  
+    } 
 
     public function offers(){
         return $this->hasMany(Offer::class);
     }
 
-    public function images(){
-        return $this->morphMany(Image::class,'imageable');
+    public function image(){ 
+        return $this->morphOne(Image::class,'imageable');
     }
 
     public function comments(){

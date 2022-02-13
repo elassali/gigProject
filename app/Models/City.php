@@ -5,14 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Profession extends Model
+class City extends Model
 {
     use HasFactory;
-  
+    protected $table = 'cities';
+    // protected $casts = [
+    //     'name' => 'array'
+    // ];
     public $timestamps = false;
+   
+    
+    
 
-    public function users(){
-        return $this->belongsToMany(User::class,'userprofessions'); 
-    }
     
 }
