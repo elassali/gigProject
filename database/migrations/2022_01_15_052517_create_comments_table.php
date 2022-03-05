@@ -17,7 +17,9 @@ class CreateCommentsTable extends Migration
             $table->id();
             $table->string('comment');
             $table->boolean('isverified')->default(false);
-            $table->bigInteger('commentable_id');
+            $table->foreignId('portfolio_id')->references('id')->on('portfolios');// the one that commented to
+            $table->integer('review_score');
+            $table->bigInteger('commentable_id');// user who made the comment
             $table->string('commentable_type');
             $table->timestamps();
         });

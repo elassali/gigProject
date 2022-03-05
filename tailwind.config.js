@@ -34,6 +34,10 @@ module.exports = {
               },
               height: {
                 '400px': '400px',
+                '76' : '19rem',
+                '84' : '21rem',
+                '140' : '35rem',
+                '80vh' : '80vh'
               },
               visibility: ["group-hover"],
         },

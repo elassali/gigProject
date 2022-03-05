@@ -1,9 +1,11 @@
-import indexpage from "../vue/home_page"
+import indexpage from "../vue/index"
 import profile from "../vue/components/index/userprofile"
 import joboffers from "../vue/components/userdashboard/userdataview"
-import proficents from "../vue/components/index/usercardlist"
+import talents from "../vue/components/index/usercardlist"
 import settings from "../vue/components/userdashboard/settings"
 import userinfo from "../vue/components/userdashboard/userinfo"
+import comments from "../vue/components/index/comments.vue"
+import chat from '../vue/components/userdashboard/chatbox.vue'
 export default{
     mode: 'history',
 
@@ -15,7 +17,8 @@ export default{
         }, 
         {
             path:'/profile',
-            component:profile
+            component:profile,
+            name:'profile'
         },
         {
             path:'/account/my-jobs-offers', 
@@ -24,17 +27,28 @@ export default{
         },
         {
             path:'/talent-hire',
-            component:proficents
+            component:talents
         },
         {
             path:'/account',
-            component:settings
+            component:settings,
+            name:'account'
         },
         {
             path:'/account/user-info',
             component:userinfo,
             name:'UserInfo'
+        },
+        {
+            path:'/comments',
+            component:comments,
+        },
+        {
+            path:'/conversations', 
+            component:chat,
+            name:'chat'
         }
+
     ] 
 
 }

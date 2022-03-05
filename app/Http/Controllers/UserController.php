@@ -100,7 +100,7 @@ class UserController extends Controller
                                              'description' => $offer->details->description,
                                              'job_date' => $offer->details->for_date,
                                              'job_expire' =>$offer->details->expired_at,
-                                             'id' => $offer->details->id,
+                                             'offer_details_id' => $offer->details->id,
                                              'offer_title' => $offer->details->offer_title,
                                              'city' => $offer->details->city,   
             );

@@ -63,11 +63,22 @@
                             <!-- avatar with user menu start -->
                             <!-- Notification -->
                             <div class="flex items-center mt-4 md:mt-0">
-                                <button v-on:click="isnotificationopen()" class="hidden mx-4 text-gray-600 transition-colors duration-200 transform md:block dark:text-gray-200 hover:text-gray-700 dark:hover:text-gray-400 focus:text-gray-700 dark:focus:text-gray-400 focus:outline-none" aria-label="show notifications">
+                                <button v-on:click="isnotificationopen()" class="hidden  text-gray-600 transition-colors duration-200 transform md:block dark:text-gray-200 hover:text-gray-700 dark:hover:text-gray-400 focus:text-gray-700 dark:focus:text-gray-400 focus:outline-none" aria-label="show notifications">
                                     <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M15 17H20L18.5951 15.5951C18.2141 15.2141 18 14.6973 18 14.1585V11C18 8.38757 16.3304 6.16509 14 5.34142V5C14 3.89543 13.1046 3 12 3C10.8954 3 10 3.89543 10 5V5.34142C7.66962 6.16509 6 8.38757 6 11V14.1585C6 14.6973 5.78595 15.2141 5.40493 15.5951L4 17H9M15 17V18C15 19.6569 13.6569 21 12 21C10.3431 21 9 19.6569 9 18V17M15 17H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                     </svg>
                                 </button>
+                                <router-link :to="{name:'chat'}"  
+                                class="hidden mx-4 text-gray-600 transition-colors duration-200 transform md:block dark:text-gray-200 hover:text-gray-700 dark:hover:text-gray-400 focus:text-gray-700 dark:focus:text-gray-400 focus:outline-none" aria-label="show notifications">
+                                    <div class="relative">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                                        </svg>
+                                        <span 
+                                        class="absolute top-0 right-0 flex items-center justify-center ml-auto text-xs text-white bg-red-500 h-3.5 w-3.5 rounded-full leading-none">
+                                        1</span>
+                                    </div>
+                                </router-link>
                                 <!-- Avatar -->
                                 <button v-on:click="isusermenuopen()" type="button" class="relative flex items-center focus:outline-none" aria-label="toggle profile dropdown">
                                     <div class="z-50 w-8 h-8 overflow-hidden border-2 border-sky-400 rounded-full">
@@ -81,9 +92,11 @@
                                                 <path d="M6.34315 16.3431C4.84285 17.8434 4 19.8783 4 22H6C6 20.4087 6.63214 18.8826 7.75736 17.7574C8.88258 16.6321 10.4087 16 12 16C13.5913 16 15.1174 16.6321 16.2426 17.7574C17.3679 18.8826 18 20.4087 18 22H20C20 19.8783 19.1571 17.8434 17.6569 16.3431C16.1566 14.8429 14.1217 14 12 14C9.87827 14 7.84344 14.8429 6.34315 16.3431Z" fill="currentColor"></path>
                                             </svg>
                                             
-                                            <span class="mx-1">
-                                                view profile
-                                            </span>
+                                            <router-link 
+                                            :to="{name : 'account'}"
+                                             class="mx-1">
+                                                Account
+                                            </router-link>
                                         </a>
                                         
                                         <a href="#" class="flex items-center p-3 text-sm text-gray-600 capitalize transition-colors duration-200 transform dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 dark:hover:text-white">
@@ -169,7 +182,7 @@
                 
 
                 <!-- Notification Start -->
-            <div v-bind:class="[notificationbar ? 'w-full h-full bg-[#000000bf] top-0 overflow-y-auto overflow-x-hidden fixed sticky-0' : 'hidden']" id="chec-div">
+            <div v-bind:class="[notificationbar ? 'w-full h-full bg-[#000000bf] top-0 overflow-y-auto overflow-x-hidden fixed sticky-0 z-50' : 'hidden']" >
               <div class="w-full absolute z-10 right-0 h-full overflow-x-hidden transform translate-x-0 transition ease-in-out duration-700" id="notification">
                 <div class="2xl:w-4/12 bg-gray-50 h-screen overflow-y-auto p-8 absolute right-0">
                     <div class="flex items-center justify-between">

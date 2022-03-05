@@ -1,5 +1,6 @@
 const mix = require('laravel-mix');
 require('laravel-mix-purgecss');
+require('dotenv').config();
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management

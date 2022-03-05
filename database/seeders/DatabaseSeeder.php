@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Conversation;
 use App\Models\Portfolio;
 use App\Models\Reportedaccount;
 use App\Models\Ticketdetail;
@@ -29,5 +30,8 @@ class DatabaseSeeder extends Seeder
        $this->call(Portfolioseeder::class);
        $this->call(Commentseeder::class);
        $this->call(Imageseeder::class);
+       $this->call(Replyseeder::class);
+       $this->call(Conversationseeder::class);
+       $this->call(Messageseeder::class);
     }
 }

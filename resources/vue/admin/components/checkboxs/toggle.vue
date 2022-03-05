@@ -18,7 +18,7 @@
 
 
 </template>
-<<script>
+<script>
 export default {
     model:{
         prop:'checked',

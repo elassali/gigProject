@@ -74,10 +74,26 @@ class User extends Authenticatable
         return $this->hasMany(Restoredaccount::class);
     }
     public function report(){
-        return $this->hasMany(Reportedaccount::class);
+        return $this->hasMany(Reportedaccount::class,'reporter_user_id','id');
     }
     public function portfolio(){
-        return $this->hasOne(Portfolio::class);
+        return $this->hasMany(Portfolio::class);
     }
+    public function getFullNameAttribute() {
+
+        return ucfirst($this->name) . ' ' . ucfirst($this->lastname);
+    }
+    public function replies(){
+        return $this->hasMany(Reply::class,'user_id','id');
+    }
+    public function city(){
+        return $this->hasOne('title','city');
+    }
+    // * get user conversation
+    public function conversations(){
+        return $this->hasMany(Conversation::class,'recipent','id');
+    }
+        
+       
    
 }

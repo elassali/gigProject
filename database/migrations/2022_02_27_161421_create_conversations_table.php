@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateReportedaccountsTable extends Migration
+class CreateConversationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateReportedaccountsTable extends Migration
      */
     public function up()
     {
-        Schema::create('reportedaccounts', function (Blueprint $table) {
+        Schema::create('conversations', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('reporter_user_id')->reference('id')->on('users');
-            $table->foreignId('reported_user_id')->reference('id')->on('users');
-            $table->string('report_reason');
+            $table->foreignId('sender')->references('id')->on('users');
+            $table->foreignId('recipent')->references('id')->on('users');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ class CreateReportedaccountsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('reportedaccounts');
+        Schema::dropIfExists('conversations');
     }
 }

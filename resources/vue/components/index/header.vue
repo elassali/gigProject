@@ -1,5 +1,6 @@
 <template>
-    <header>
+<div id="root">
+    <header v-if="!isconnected">
         <!--  Start navigationbar -->
     <nav class="bg-white shadow dark:bg-gray-800">
         <div class="container px-6 py-3 mx-auto">
@@ -23,7 +24,7 @@
                 <!-- Mobile Menu open: "block", Menu closed: "hidden" -->
                 <div class="items-center md:flex">
                     <div class="flex flex-col mt-2 md:flex-row md:mt-0 md:mx-1">
-                        <a class="my-1 text-sm leading-5 text-gray-700 transition-colors duration-200 transform dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:underline md:mx-4 md:my-0" href="#">Home</a>
+                        <a class="my-1 text-sm leading-5 text-gray-700 transition-colors duration-200 transform dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:underline md:mx-4 md:my-0" href="#" >Home</a>
                         <a class="my-1 text-sm leading-5 text-gray-700 transition-colors duration-200 transform dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:underline md:mx-4 md:my-0" href="#">Blog</a>
                         <a class="my-1 text-sm leading-5 text-gray-700 transition-colors duration-200 transform dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:underline md:mx-4 md:my-0" href="#">Compoents</a>
                         <a class="my-1 text-sm leading-5 text-gray-700 transition-colors duration-200 transform dark:text-gray-200 hover:text-blue-600 dark:hover:text-blue-400 hover:underline md:mx-4 md:my-0" href="#">Courses</a>
@@ -92,7 +93,7 @@
                     <a @click="isopen(3)" class="text-xs text-gray-500 dark:text-gray-300 hover:underline cursor-pointer">Forget Password?</a>
                 </div>
 
-                <input v-model="password"class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" type="password">
+                <input v-model="password" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" type="password">
             </div>
 
             <div class="mt-8">
@@ -248,23 +249,27 @@
   </div>
         <!--  End section -->
 
-   </header>
+</header>
 
-
-
+    <!-- user header  -->
+    <c-user-header v-if="isconnected"></c-user-header>
+</div>
 </template>
 <script>
 import baseinput from "../../admin/components/inputs/baseinput"
+import userheader from '../userdashboard/header'
 export default {
     components:{
-        'c-baseinput' : baseinput
+        'c-baseinput' : baseinput,
+        'c-user-header' : userheader
     },
    data(){
        return{
            modalopen : false,
            email:undefined,
            password:undefined,
-           username:undefined
+           username:undefined,
+           isconnected:undefined
        }
    },
     methods:{
@@ -293,8 +298,21 @@ export default {
                     response => console.log(response)
                 )
                 .catch(e => console.log(e)) 
+        },
+        checklogin:function(){
+             axios.get('/api/check').then(response => this.isconnected =  response.data.islogedin)
         }
-   
+    },
+    watch:{
+        isconnected:{
+            handler:function(){
+                axios.get('/api/check').then(response => this.isconnected =  response.data.islogedin)
+            },
+            deep:true
+        }
+    },
+    mounted(){
+        this.checklogin()
     }
     
 }

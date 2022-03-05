@@ -16,8 +16,9 @@ class CreatePortfoliosTable extends Migration
         Schema::create('portfolios', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained();
-            $table->integer('score');
             $table->foreignId('profession_id')->constrained();
+            $table->integer('score');
+            
         });
     }
 

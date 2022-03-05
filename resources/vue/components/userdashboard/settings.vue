@@ -1,5 +1,6 @@
 <template>
-
+<div>
+<c-header></c-header>
          <!-- This is an example component -->
         <div class="container mx-auto my-4 flex w-full">
         <!-- setting component-->
@@ -48,10 +49,14 @@
         </div>
        <!-- setting component-->
     <!-- This is an example component -->
-
+</div>
 </template>
 <script>
+import header from './header'
 export default {
+    components:{
+        'c-header' : header
+    },
     data(){
         return{
             isToolTipHover:undefined

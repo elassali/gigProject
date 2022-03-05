@@ -13,7 +13,7 @@
                   :disabled="isdesabeld"
                   :value="value"
                   v-on:input="$emit('input',$event.target.value)"
-                  class="p-1 px-2 appearance-none outline-none w-full text-gray-800 h-full  ">
+                  class="p-1 px-2 appearance-none outline-none w-full text-gray-800 h-full disabled:bg-white placeholder:text-black ">
                 <div>
                     <button v-on:click="cleardata()" class="cursor-pointer w-6 h-full flex items-center text-gray-400 outline-none focus:outline-none">
                         <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather hover:stroke-red-600 feather-x w-4 h-4">
@@ -72,34 +72,41 @@ export default {
         label:{
             type:String,
             default:''
-        }
+        },
      
     },
     data(){
         return{
             isopen:false,
-            selected:undefined,
+            selected:'',
             filtered_data:'',
-            value:undefined 
-                
+            value:'',   
         }
     },
     methods:{
         openselectoptions:function(){
             this.isopen = !this.isopen
         },
-
         selectedoption:function(id,optiontitle){ 
             this.isopen = false;
             this.value = optiontitle,
             this.selected = id
-            this.$emit('sendittoparent',[optiontitle,id]) 
+            
+            this.$emit('sendittoparent',({
+                 id:this.selected,
+                 title:this.value 
+            })) 
             
         },
         cleardata:function(){
             this.value = ""
             this.isopen = true
             this.selected = -1
+
+            this.$emit('sendittoparent',({
+                id:'',
+                title:''
+            })) 
         },
         filter:function(){
             this.inputsearsh.length > 0 ? this.isopen = true : ''

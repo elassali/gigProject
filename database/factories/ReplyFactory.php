@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class ReportedaccountFactory extends Factory
+class ReplyFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -14,9 +14,9 @@ class ReportedaccountFactory extends Factory
     public function definition()
     {
         return [
-            'reporter_user_id' => random_int(1,50),
-            'reported_user_id' =>random_int(1,50),
-            'report_reason' => $this->faker->text($maxNbChars = 100),
+            'comment_id' => random_int(1,100),
+            'user_id' => random_int(1,30),
+            'reply' => $this->faker->text()
         ];
     }
 }
