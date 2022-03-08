@@ -144,7 +144,7 @@
                                     </div>
                                 </div>
                                 <!-- ! ============================================== -->
-                                <div :class="moreinfo ? 'flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-4 border-b border-t py-2 justify-between' : 'hidden'">
+                                <div :class="moreinfo ? 'flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-4 mt-4 border-b border-t py-2 justify-between' : 'hidden'">
 
                                         <div class="flex items-center ">
                                             <span clas="text-green-500">
@@ -168,17 +168,17 @@
                                                 <!-- Actions -->
                                             <button @click="addprofession = true" :class="addprofession == false ? 'text-sm text-blue-400 ml-2' : 'hidden'">Add New Profession</button>
                                             <div :class="addprofession  ? '' : 'hidden' ">
-                                                <button @click="addprofessiontouser()" class="text-sm text-green-400 ml-2">Save</button>
+                                                <button @click="addprofessiontouser" class="text-sm text-green-400 ml-2">Save</button>
                                                 <button @click="addprofession = false" class="text-sm text-red-400 ml-2">Cancel</button>
 
                                             </div>
                                         </div>                        
                                         
                                 </div>
-                                <div class="text-gray-700">
+                                <div :class="moreinfo ? 'text-gray-700' : 'hidden' ">
                                     <div class="grid md:grid-cols-2 text-sm">
                                     <!-- Display mode -->
-                                        <div v-if="!editmode" v-for="item in userprofession" :key="item.id" class="grid grid-cols-2 flex items-center">
+                                        <div v-if="!editmode" v-for="(item,index) in userprofession" :key="index" class="grid grid-cols-2 flex items-center">
 
                                             <div class="px-4 py-2 font-semibold">Job title</div>
                                                 <div class="flex items-center ">
@@ -196,7 +196,7 @@
                                                     <!-- action buttons before update is on -->
                                                     <div class="flex items-center">
                                                         <button @click="updateprofession = true" :class="updateprofession ? 'hidden' : 'text-xs text-blue-400'">Update</button>
-                                                        <button @click="detachprofession(item.id)" :class="updateprofession ? 'hidden' : 'text-xs text-red-400 ml-2'">Delete</button>
+                                                        <button @click="detachprofession(item.id,index)" :class="updateprofession ? 'hidden' : 'text-xs text-red-400 ml-2'">Delete</button>
                                                     </div>     
                                                     <!-- action buttons after update is on -->
                                                     <div class="flex items-center">
@@ -223,17 +223,17 @@
                                                         >
                                                         </c-baseselect> 
                                                     </div>
-                                        </div>
+                                            </div>
                                             
                                         </div>
                                     </div>
                                     <!-- edit mode end -->
                                     <button
-                                    @click="moreinfo = !moreinfo"
-                                    class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4"
-                                    >
-                                    Show Full Information
-                                </button>
+                                        @click="moreinfo = !moreinfo"
+                                        class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4"
+                                        >
+                                        Show Full Information
+                                    </button>
                                 </div> 
 
                             <!-- ============================================== -->
@@ -249,6 +249,11 @@
                         </div>
                     </div>
                 </div>
+                    <c-comnfirmation
+                    :showConfirmation="deleteconfirmation"
+                    v-on:cancelActon="confirmation"
+                    v-on:confirmActon="confirmation"
+                    ></c-comnfirmation>
             </div>
 </template>
 <script>
@@ -256,12 +261,14 @@ import inputfloatlabel from '../../admin/components/inputs/baseinput'
 import basedatepiker from '../../admin/components/inputs/basedatetime'
 import basesetelect from '../../admin/components/inputs/baseselectinput'
 import header from './header'
+import confirmationModal from '../../admin/components/confirmationModal'
 export default {
     components:{
         'c-baseinput' : inputfloatlabel, 
         'c-basedatepiker' : basedatepiker,
         'c-baseselect' : basesetelect,
-        'c-header' : header
+        'c-header' : header,
+        'c-comnfirmation' : confirmationModal
     },
     data(){
         return{
@@ -277,7 +284,9 @@ export default {
         updateprofession:undefined,
         image:"/images/profileImages/default_profile_picture.jpg",
         imagepreview:undefined,
-        oldimagevalue:undefined
+        oldimagevalue:undefined,
+        deleteconfirmation:false,
+        jobToDeleteAfetrConfirmation:undefined
         }
     },
     methods:{
@@ -285,7 +294,13 @@ export default {
             try{
                   axios.get('/api/my-information')
                  .then(response => 
-                    [this.userdata = response.data.data, this.datefromcoponent = response.data.date_of_birth, this.userprofession = response.data.userprofession, this.allprofession = response.data.allprofession, this.imagepreview = response.data.profilePicture ]
+                    {
+                        this.userdata = response.data.data, 
+                        this.datefromcoponent = response.data.date_of_birth, 
+                        this.userprofession = response.data.userprofession, 
+                        this.allprofession = response.data.allprofession, 
+                        this.imagepreview = response.data.profilePicture
+                    }
                  )
                  .catch(e => console.log(e))  
                
@@ -300,9 +315,9 @@ export default {
         },
         // ? retrieve data from select component
         getvalueofjob:function(value){
-            this.jobtoadd = value[0]
-            this.jobtoadd_id = value[1]
-            console.log(value)
+            this.jobtoadd = value.title
+            this.jobtoadd_id = value.id
+            console.log(this.jobtoadd)
         },
         // ? retireive uploaded file
           getfilename:function(event){
@@ -315,18 +330,43 @@ export default {
             }
             console.log(this.image)
         },
+        confirmation:function(value){
+            if(value){
+                console.log('delete')
+                axios.delete('/api/user/profession/deleteconfirmed',{data:{professionID:this.jobToDeleteAfetrConfirmation}})
+                     .then(response => {
+                         console.log(response)
+                        this.deleteconfirmation = false
+                     })   
+            }
+            else{
+                this.deleteconfirmation = false
+                console.log('cancel deletation')
+            }
+        },
         // ? Profession methods crud start
         addprofessiontouser:function(){
-            axios.post('/api/user/profession/new',{
-                professionName: this.jobtoadd_id
-            }).then(this.getuserinfo) 
+            axios.post('/api/user/profession/new',{ 
+                professionID: this.jobtoadd_id
+            }).then(response => {
+                response.data.status == 201 ? this.userprofession.push(response.data.userprofesions) : '',
+                this.addprofession = false  
+                console.log(response)
+             }
+                ) // ! this.getuserinfo 
               .catch(e => console.log(e))
         }, 
-        detachprofession:function(jobid){
-             axios.delete('/api/user/profession/delete',{data:{professionName:jobid}})
-                 .then(this.getuserinfo)
+        detachprofession:function(jobid,index){
+             axios.delete('/api/user/profession/delete',{data:{professionID:jobid}})
+                 .then( response => {
+                     response.data.status == 201 ? this.userprofession.splice(index,1) : '',
+                     response.data.status == 409 ? [this.deleteconfirmation = true, this.jobToDeleteAfetrConfirmation = jobid] : ''
+                     console.log(response)
+                 
+                 })
                  .catch(e => console.log(e))
         },
+        
         updateProfession:function(oldjobid){
             axios.put('/api/user/profession/update',{oldprofeesion:oldjobid,newprofession:this.jobtoadd })
                  .then([this.updateprofession = false, this.getuserinfo])

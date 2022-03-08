@@ -6,6 +6,7 @@ import settings from "../vue/components/userdashboard/settings"
 import userinfo from "../vue/components/userdashboard/userinfo"
 import comments from "../vue/components/index/comments.vue"
 import chat from '../vue/components/userdashboard/chatbox.vue'
+import alert from '../vue/admin/components/alert.vue'
 export default{
     mode: 'history',
 
@@ -47,7 +48,12 @@ export default{
             path:'/conversations', 
             component:chat,
             name:'chat'
-        }
+        },
+        // ! to remove after finishing
+        {
+            path:'/alert', 
+            component:alert,
+        },
 
     ] 
 

@@ -2,7 +2,9 @@
 
 <div id="root">
 
-    <c-home-header></c-home-header>
+    <c-home-header
+    :loginrequest="loginrequestToheader"
+    ></c-home-header>
 
 <main
  :class="[ actionmodals != -1 ? 'relative after:absolute after:content after:w-full after:h-full after:bg-black after:opacity-80 after:top-0' : '','flex flex-col']">
@@ -31,7 +33,7 @@
                        
                         </div>
                         <div class=" absolute  left-2/4 -translate-x-1/2 -top-full z-auto mb-4">
-                            <img class="rounded-full h-36" src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260">
+                            <img class="rounded-full h-36 w-36" :src="user.image">
                             
                         </div>
                         <div class="items-start flex pt-2">
@@ -91,7 +93,7 @@
 
         <!-- ================================================================== -->
         <div class="flex flex-col items-center mt-12 mb-4">
-            <h class="text-xl font-semibold">About Me</h>
+            <h3 class="text-xl font-semibold">About Me</h3>
             <p class="text-center">
                     An artist of considerable range, Jenna the name taken by Melbourne-raised, Brooklyn-based Nick Murphy writes, 
                     performs and records all of his own music, giving it a warm, 
@@ -240,7 +242,7 @@
                              <!-- login to report starts-->
                           <div  class="bg-white flex items-center h-24 w-full justify-center  " >
                               <div  @click="actionmodaldisplay(-1)" class="btn border border-gray-300 p-1 px-4 font-semibold cursor-pointer text-gray-500">Cancel</div>
-                               <div @click="$emit('loginrequested')" class="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500">Log In</div>
+                               <div @click="loginrequested" class="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500">Log In</div>
                          </div>
                          <!-- login to report Ends-->
                             
@@ -263,7 +265,7 @@
                                         <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                                         </svg>
                                         </span>
-                                      <sapn class="ml-1">Contact By Phone</sapn>
+                                      <span class="ml-1">Contact By Phone</span>
                                     </label>
                             </div>
                             <div class="flex items-center mb-4">
@@ -278,7 +280,7 @@
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                         </svg>
                                         </span>
-                                      <sapn class="ml-1">Contact By Message</sapn>
+                                      <span class="ml-1">Contact By Message</span>
                                     </label>
                             </div>
                     </div>
@@ -373,9 +375,9 @@
                         <!-- login to report starts-->
                           <div v-if="report_status == 401" class="bg-white flex items-center h-24 w-full justify-center  " >
                             <div  @click="actionmodaldisplay(-1)" class="btn border border-gray-300 p-1 px-4 font-semibold cursor-pointer text-gray-500">Cancel</div>
-                             <div @click="$emit('loginrequested')" class="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500">Log In</div>
+                             <div @click="loginrequested" class="btn border border-indigo-500 p-1 px-4 font-semibold cursor-pointer text-gray-200 ml-2 bg-indigo-500">Log In</div>
                          </div>
-                         <!-- login to report Ends-->
+                         <!-- login to report Ends--> 
                     <div
                     v-if="report_status == 202"
                     class="flex flex-row items-center justify-between p-5 bg-white border-t border-gray-200 rounded-bl-lg rounded-br-lg"
@@ -444,7 +446,8 @@ export default {
         messageBody:undefined,
         contacMethod:0,
         phoneNumber:undefined,
-        isconnected:undefined
+        isconnected:undefined,
+        loginrequestToheader:undefined
         }
     },
  
@@ -501,6 +504,11 @@ export default {
             }
             
         },
+        // ? request login fom pop-up
+        loginrequested:function(){
+            this.actionmodaldisplay(-1)
+            this.loginrequestToheader = true
+        },
         getcommentvalue:function(value){
             this.comment = value
         },
@@ -516,6 +524,7 @@ export default {
 
         // *-------------------------
      actionmodaldisplay:function(val){
+         this.loginrequestToheader = false
          if(val == 1){
              this.contacMethod = 0
          }
@@ -561,7 +570,10 @@ export default {
                 params:{
                     portfolio:value 
                 }
-            }).then(response => [this.comments_data = response.data.comments, this.belongsto = response.data.isconnected,console.log(response.data)])
+            }).then(response => {
+                this.comments_data = response.data.comments, 
+                this.belongsto = response.data.isconnected
+                })
         },
         // ? create new comment
         createcomment:function(){

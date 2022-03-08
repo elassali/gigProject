@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Profession;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Models\Image;
+use App\Models\Portfolio;
+use Symfony\Component\HttpFoundation\Response;
 
 
 
@@ -27,20 +29,61 @@ class UserController extends Controller
     }
     // ! profile view edit in userdashboard
     // ? Profession crud starts
-    public function newprofession(Request $request){
-        $jobtitle = strtolower($request['professionName']);
-        $jobtitle = trim($request['professionName']);
+    public function newprofession(Request $request){ //* Add new profession
+        $jobid = $request['professionID'];
         $user = Auth::user();
-        $user->userprofession()->attach($jobtitle); 
-        return $user->userprofession;
-
+        if($user){
+            if($user->userprofession->count() > 2){
+                return response(['status' => Response::HTTP_FORBIDDEN]);
+            }
+            elseif($user->userprofession->where('id',$jobid)->first()){
+                return response(['status' => Response::HTTP_FOUND]);
+            }
+            else{
+                $user->userprofession()->attach($jobid); 
+                $lastAddedProfession = $user->userprofession()->orderBy('id','DESC')->first();
+                // * adding portfolio for this added profession
+                $portfolio = new Portfolio();
+                $portfolio->user_id = $user->id;
+                $portfolio->profession_id = $lastAddedProfession->pivot->profession_id;
+                $portfolio->save();
+                return   response([
+                    'status' => Response::HTTP_CREATED,
+                    'userprofesions' => $lastAddedProfession
+                    
+                ]);
+            }
+            
+        }
+        else{
+            return response(['status' => Response::HTTP_UNAUTHORIZED]);
+        }
+      
+ 
     }
     public function detachprofession(Request $request){
-        $job = $request['professionName'];
+        $job = $request['professionID'];
+        $user = Auth::user();
+        if( $user->portfolio->where('profession_id',$job)->first() ){
+            return response(['status' => Response::HTTP_CONFLICT]);
+            if( $user->portfolio->where('profession_id',$job)->first()->images()->count() > 0){
+                return response(['status' => Response::HTTP_CONFLICT]); // ! 409 status code to popup confirmation
+            }
+            else{
+                $user->userprofession()->detach($job);
+                $user->portfolio->where('profession_id',$job)->first()->delete();
+                return response(['status' => Response::HTTP_ACCEPTED]); // ! 202 status code accepted
+            }
+            
+        }      
+        
+    }
+    public function deleteConfirmed(Request $request){
+        $job = $request['professionID'];
         $user = Auth::user();
         $user->userprofession()->detach($job);
-        return $user->userprofession;
-
+        $user->portfolio->where('profession_id',$job)->first()->delete();
+        return response(['status' => Response::HTTP_ACCEPTED]); // ! 202 status code accepted
     }
     public function updateexestingjob(Request $request){
         $job = $request['oldprofeesion'];
@@ -50,8 +93,6 @@ class UserController extends Controller
         $profession = Profession::where('title',$jobtitle)->first();
         $user->userprofession()->updateExistingPivot($job,['profession_id' => $profession->id ]);
         return $user->userprofession;
-        
-        
     }
     // ? Profession crud Ends
     // ? Profile update

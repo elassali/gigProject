@@ -32,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function() {
     // ? proffession crud starts
     Route::post('/user/profession/new',[UserController::class,'newprofession']);
     Route::DELETE('/user/profession/delete',[UserController::class,'detachprofession']);
+    Route::DELETE('/user/profession/deleteconfirmed',[UserController::class,'deleteConfirmed']);//? delete confirmed
     Route::put('/user/profession/update',[UserController::class,'updateexestingjob']);
     // ? proffession crud Ends
     // ? profile CRUD stats

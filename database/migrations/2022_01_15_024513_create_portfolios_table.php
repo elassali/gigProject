@@ -17,7 +17,7 @@ class CreatePortfoliosTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained();
             $table->foreignId('profession_id')->constrained();
-            $table->integer('score');
+            $table->integer('score')->default(0);
             
         });
     }

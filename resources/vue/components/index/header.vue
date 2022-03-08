@@ -259,6 +259,12 @@
 import baseinput from "../../admin/components/inputs/baseinput"
 import userheader from '../userdashboard/header'
 export default {
+    props:{
+        loginrequest:{
+            type:Boolean,
+            default:false
+        }
+    },
     components:{
         'c-baseinput' : baseinput,
         'c-user-header' : userheader
@@ -274,8 +280,8 @@ export default {
    },
     methods:{
         isopen:function(val){
-           
             this.modalopen = val
+          
         },
         login:function(){
             axios.get('sanctum/csrf-cookie').then(response => {
@@ -301,6 +307,9 @@ export default {
         },
         checklogin:function(){
              axios.get('/api/check').then(response => this.isconnected =  response.data.islogedin)
+        },
+        loginpopup:function(){
+            console.log("login from parent")
         }
     },
     watch:{
@@ -309,7 +318,14 @@ export default {
                 axios.get('/api/check').then(response => this.isconnected =  response.data.islogedin)
             },
             deep:true
+        },
+    
+        loginrequest: function(newVal, oldVal) { // watch it
+          if(newVal){
+              this.isopen(1)
+          }
         }
+         
     },
     mounted(){
         this.checklogin()
