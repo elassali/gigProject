@@ -15,7 +15,6 @@ export default {
     components:{
      
     },
-    // props:["notificationbar","menuopen"],
      data() {
         return {
               

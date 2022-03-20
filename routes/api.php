@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfessionConroller;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\GalleryManagerController;
 use App\Http\Middleware\Authenticate;
 use Laravel\Sanctum\Sanctum;
 use League\CommonMark\Extension\CommonMark\Node\Block\IndentedCode;
@@ -66,6 +67,15 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/contact',[ContactController::class,'contact']); 
     // ? get user phone number
     Route::get('/user-phone',[ContactController::class,'getPhoneNumber']);
+
+    // * get connected user professions [Gallery manager]
+    Route::get('/gallerymanager',[GalleryManagerController::class,'getPortfolios']);
+    Route::get('/portfolio',[GalleryManagerController::class,'professionImages']);
+    // ! add images
+    Route::post('/add-professionion-images',[GalleryManagerController::class,'addImages']);
+    // ! Remove images
+    Route::delete('/remove-professionion-images',[GalleryManagerController::class,'removeImages']);
+
 
 }); 
 

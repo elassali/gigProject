@@ -34,10 +34,10 @@ class UserController extends Controller
         $user = Auth::user();
         if($user){
             if($user->userprofession->count() > 2){
-                return response(['status' => Response::HTTP_FORBIDDEN]);
+                return response(['status' => Response::HTTP_FORBIDDEN]); // ! 403 count more than 2
             }
             elseif($user->userprofession->where('id',$jobid)->first()){
-                return response(['status' => Response::HTTP_FOUND]);
+                return response(['status' => Response::HTTP_FOUND]); // ! 302 already exist
             }
             else{
                 $user->userprofession()->attach($jobid); 
@@ -64,8 +64,7 @@ class UserController extends Controller
     public function detachprofession(Request $request){
         $job = $request['professionID'];
         $user = Auth::user();
-        if( $user->portfolio->where('profession_id',$job)->first() ){
-            return response(['status' => Response::HTTP_CONFLICT]);
+        if( $user->portfolio->where('profession_id',$job)->first()  ){
             if( $user->portfolio->where('profession_id',$job)->first()->images()->count() > 0){
                 return response(['status' => Response::HTTP_CONFLICT]); // ! 409 status code to popup confirmation
             }
@@ -75,7 +74,10 @@ class UserController extends Controller
                 return response(['status' => Response::HTTP_ACCEPTED]); // ! 202 status code accepted
             }
             
-        }      
+        }    
+        else{
+            return "kalwa"; 
+        }  
         
     }
     public function deleteConfirmed(Request $request){
@@ -85,15 +87,33 @@ class UserController extends Controller
         $user->portfolio->where('profession_id',$job)->first()->delete();
         return response(['status' => Response::HTTP_ACCEPTED]); // ! 202 status code accepted
     }
+
+    //  ? ============================= update profession ========================
     public function updateexestingjob(Request $request){
-        $job = $request['oldprofeesion'];
-        $jobtitle = strtolower($request['newprofession']);
-        $jobtitle = trim($request['newprofession']);
-        $user = Auth::user();
-        $profession = Profession::where('title',$jobtitle)->first();
-        $user->userprofession()->updateExistingPivot($job,['profession_id' => $profession->id ]);
-        return $user->userprofession;
+        $oldjob = $request['oldprofession'];
+        $newjob = $request['newprofession'];
+        if( Profession::where('id',$oldjob)->first() && Profession::where('id',$oldjob)->first() )
+        {
+            $user = Auth::user();
+            if( $user->portfolio->where('profession_id',$oldjob)->first()->images()->count() > 0){
+                return response(['status' => Response::HTTP_CONFLICT]); // ! 409 status code to popup alert info of portfolio not empty
+            }
+            elseif($user->portfolio->where('profession_id',$newjob)->first()){
+                return response(['status' => Response::HTTP_FOUND]); // ! 302 status code already exist
+            }
+            else{
+                $user->userprofession()->updateExistingPivot($oldjob,['profession_id' => $newjob ]);
+                return response([
+                    'status' => Response::HTTP_ACCEPTED, // ! 202 status code updated
+                    'userprofessions' =>$user->userprofession
+                ]);
+            }
+           
+            
+        }
+       
     }
+
     // ? Profession crud Ends
     // ? Profile update
     public function profileupdate(Request $request){ 
@@ -114,7 +134,7 @@ class UserController extends Controller
              
                 $user->image()->delete(); // ? remove from datbase
 
-
+                
                 //* Add New image
                 $profilepicture = new Image();
                 $profilepicture->url = $file_name;

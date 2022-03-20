@@ -10,7 +10,7 @@
                         <div class="w-full md:w-3/12 md:mx-2">
                             <!-- Profile Card -->
                             <div class="bg-white p-3 border-t-4 border-green-400">
-                                <div class="relative image overflow-hidden rounded-full">
+                                <div class="relative image overflow-hidden rounded-full shadow-lg">
                                     <img class="h-80 w-full mx-auto rounded-full"
                                         :src="imagepreview ? imagepreview : image" 
                                         alt="Profile Picture"
@@ -33,7 +33,7 @@
                                     </li>
                                     <li class="flex items-center py-3">
                                         <span>Member since</span>
-                                        <span class="ml-auto">Nov 07, 2016</span>
+                                        <span class="ml-auto">{{memberSinceDateFormat}}</span>
                                     </li>
                                 </ul>
                             </div>
@@ -66,7 +66,7 @@
                                             </svg>
                                             <div class="fles items-center">
                                                 <a @click="updateuserdata" :class="editmode ? 'text-blue-600 text-xs' : 'hidden'">Save Change</a>
-                                                <a @click="[editmode = false , imagepreview = false, image = oldimagevalue ]" :class="editmode ? 'text-red-600 text-xs' : 'hidden'">Cancel</a>
+                                                <a @click="[editmode = false , imagepreview = oldimagevalue]" :class="editmode ? 'text-red-600 text-xs' : 'hidden'">Cancel</a>
                                             </div>    
                                         </div>
                                         
@@ -137,7 +137,7 @@
                                                         </c-basedatepiker>
                                                     </template>
                                                     <template v-else>
-                                                        <div>{{userdata.date_of_birth}}</div> 
+                                                        <div>{{birthday}}</div> 
                                                     </template>
                                                 </div>
                                         </div>
@@ -183,9 +183,9 @@
                                             <div class="px-4 py-2 font-semibold">Job title</div>
                                                 <div class="flex items-center ">
                                                 <!-- view mode -->
-                                                <span :class="updateprofession ? 'hidden':'mr-4'">{{item.title}}</span>
+                                                <span :class="updateprofession == index? 'hidden':'mr-4 '">{{item.title}}</span>
                                                 <!-- Update mode -->
-                                                    <div :class="updateprofession ? 'flex mr-4' :'hidden'">
+                                                    <div :class="updateprofession == index ? 'flex mr-4' :'hidden'">
                                                         <c-baseselect
                                                         v-model="item.title"
                                                         :selections="allprofession"
@@ -195,39 +195,24 @@
                                                     </div>
                                                     <!-- action buttons before update is on -->
                                                     <div class="flex items-center">
-                                                        <button @click="updateprofession = true" :class="updateprofession ? 'hidden' : 'text-xs text-blue-400'">Update</button>
-                                                        <button @click="detachprofession(item.id,index)" :class="updateprofession ? 'hidden' : 'text-xs text-red-400 ml-2'">Delete</button>
+                                                        <button @click="updateprofession = index" :class="updateprofession == index ? 'hidden' : 'text-xs text-blue-400'">Update</button>
+                                                        <button @click="detachprofession(item.id,index)" :class="updateprofession == index ? 'hidden' : 'text-xs text-red-400 ml-2'">Delete</button>
                                                     </div>     
                                                     <!-- action buttons after update is on -->
                                                     <div class="flex items-center">
                                                         <button
                                                         @click="updateProfession(item.id)"
-                                                        :class="updateprofession ? 'text-xs text-green-400' : 'hidden'">Save
+                                                        :class="updateprofession == index ? 'text-xs text-green-400' : 'hidden'">Save
                                                         </button>
-                                                        <button @click="updateprofession = false" :class="updateprofession ? 'text-xs text-red-400 ml-2' : 'hidden'">Cancel</button>
+                                                        <button @click="updateprofession = -1" :class="updateprofession == index ? 'text-xs text-red-400 ml-2' : 'hidden'">Cancel</button>
                                                     </div>     
                                             </div>                                   
                                         </div>
                                     </div>
                                     <!-- display mode end -->
-                                    <!-- ############################## -->
-                                    <!-- edit mode -->
-                                        <div v-if="editmode" v-for="item in userprofession" class="grid grid-cols-2 flex items-center">
-                                            <!-- select input-->
-                                            <div  class="grid grid-cols-2">
-                                                <div class="px-4 py-2 font-semibold">Job title</div>
-                                                    <div>
-                                                        <c-baseselect
-                                                        v-model="item.title"
-                                                        :selections="allprofession"
-                                                        >
-                                                        </c-baseselect> 
-                                                    </div>
-                                            </div>
-                                            
-                                        </div>
+                                   <!-- // ! edit mode was here -->
                                     </div>
-                                    <!-- edit mode end -->
+                                    
                                     <button
                                         @click="moreinfo = !moreinfo"
                                         class="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4"
@@ -254,6 +239,13 @@
                     v-on:cancelActon="confirmation"
                     v-on:confirmActon="confirmation"
                     ></c-comnfirmation>
+
+                    <c-alert
+                    :called="alertCall"
+                    :text="alertText"
+                    >
+                    </c-alert>
+
             </div>
 </template>
 <script>
@@ -262,13 +254,15 @@ import basedatepiker from '../../admin/components/inputs/basedatetime'
 import basesetelect from '../../admin/components/inputs/baseselectinput'
 import header from './header'
 import confirmationModal from '../../admin/components/confirmationModal'
+import alert from '../../admin/components/alert.vue'
 export default {
     components:{
         'c-baseinput' : inputfloatlabel, 
         'c-basedatepiker' : basedatepiker,
         'c-baseselect' : basesetelect,
         'c-header' : header,
-        'c-comnfirmation' : confirmationModal
+        'c-comnfirmation' : confirmationModal,
+        'c-alert' : alert
     },
     data(){
         return{
@@ -286,7 +280,10 @@ export default {
         imagepreview:undefined,
         oldimagevalue:undefined,
         deleteconfirmation:false,
-        jobToDeleteAfetrConfirmation:undefined
+        jobToDeleteAfetrConfirmation:undefined,
+        alertCall:false,
+        alertText:undefined,
+        professionIndex:undefined
         }
     },
     methods:{
@@ -295,11 +292,12 @@ export default {
                   axios.get('/api/my-information')
                  .then(response => 
                     {
-                        this.userdata = response.data.data, 
+                        this.userdata = response.data.user, 
+                        console.log(response)
                         this.datefromcoponent = response.data.date_of_birth, 
                         this.userprofession = response.data.userprofession, 
                         this.allprofession = response.data.allprofession, 
-                        this.imagepreview = response.data.profilePicture
+                        this.imagepreview  = this.oldimagevalue = response.data.profilePicture
                     }
                  )
                  .catch(e => console.log(e))  
@@ -321,27 +319,28 @@ export default {
         },
         // ? retireive uploaded file
           getfilename:function(event){
-            this.oldimagevalue = this.image; 
+            this.oldimagevalue = this.imagepreview; 
             this.image = event.target.files[0]
             let reader = new FileReader();
             reader.readAsDataURL(this.image);
             reader.onload = e =>{
                 this.imagepreview = e.target.result
             }
-            console.log(this.image)
         },
         confirmation:function(value){
             if(value){
-                console.log('delete')
                 axios.delete('/api/user/profession/deleteconfirmed',{data:{professionID:this.jobToDeleteAfetrConfirmation}})
                      .then(response => {
                          console.log(response)
+                        response.data.status == 202 ? this.userprofession.splice(this.professionIndex,1) : '',
                         this.deleteconfirmation = false
+                        this.alertText="Profession Deleted"
+                        this.alertCall = true
+                        setTimeout(() => {   this.alertCall = false; }, 1500)
                      })   
             }
             else{
                 this.deleteconfirmation = false
-                console.log('cancel deletation')
             }
         },
         // ? Profession methods crud start
@@ -349,9 +348,12 @@ export default {
             axios.post('/api/user/profession/new',{ 
                 professionID: this.jobtoadd_id
             }).then(response => {
-                response.data.status == 201 ? this.userprofession.push(response.data.userprofesions) : '',
-                this.addprofession = false  
-                console.log(response)
+                console.log(response),
+                response.data.status == 201 ? [this.userprofession.push(response.data.userprofesions),this.alertText="Profession Added !",this.alertCall = true] : '',
+                response.data.status == 403 ? [this.alertText="Sorry you can't have more than 3 Professions !",this.alertCall = true] : ''
+                response.data.status == 302 ? [this.alertText="Sorry Profession you are trying to Add is already exist !",this.alertCall = true] : ''
+                this.addprofession = false 
+                setTimeout(() => {   this.alertCall = false; }, 1500)
              }
                 ) // ! this.getuserinfo 
               .catch(e => console.log(e))
@@ -359,17 +361,30 @@ export default {
         detachprofession:function(jobid,index){
              axios.delete('/api/user/profession/delete',{data:{professionID:jobid}})
                  .then( response => {
-                     response.data.status == 201 ? this.userprofession.splice(index,1) : '',
-                     response.data.status == 409 ? [this.deleteconfirmation = true, this.jobToDeleteAfetrConfirmation = jobid] : ''
                      console.log(response)
+                     this.professionIndex = index,
+                     response.data.status == 202 ? [
+                        this.userprofession.splice(index,1),
+                        this.alertText="Profession Deleted",
+                        this.alertCall = true,
+                        setTimeout(() => {   this.alertCall = false; }, 1500),
+                        ] : '',
+                     response.data.status == 409 ? [this.deleteconfirmation = true, this.jobToDeleteAfetrConfirmation = jobid] : ''
                  
                  })
                  .catch(e => console.log(e))
         },
         
         updateProfession:function(oldjobid){
-            axios.put('/api/user/profession/update',{oldprofeesion:oldjobid,newprofession:this.jobtoadd })
-                 .then([this.updateprofession = false, this.getuserinfo])
+            axios.put('/api/user/profession/update',{oldprofession:oldjobid,newprofession:this.jobtoadd_id })
+                 .then(response => {
+                     this.updateprofession = false,
+                     response.data.status == 409 ? [this.alertText="Sorry Profession you are trying to update has pictures !",this.alertCall = true ] : '',
+                     response.data.status == 302 ? [this.alertText="Sorry Profession you are trying to Add is already exist !",this.alertCall = true ] : '',
+                     this.getuserinfo,
+                     console.log(response)
+                     setTimeout(() => {   this.alertCall = false; }, 1500) 
+                })
                  .catch(e => console.log(e))   
             
         },
@@ -389,6 +404,7 @@ export default {
             data.append('email',this.userdata.email)
             data.append('birthDay',this.userdata.date_of_birth)
             data.append('username',this.userdata.username)
+            
             axios.post('/api/user/profile/update',data,config)
                 .then([this.editmode = false,this.getuserinfo])
                 .catch(e => console.log(e)) 
@@ -400,7 +416,16 @@ export default {
             if(this.datefromcoponent instanceof Date){
               return this.datefromcoponent.toLocaleString('en-NZ',{year:'numeric',month:'long',day:'numeric'})
             } 
+        },
+        memberSinceDateFormat:function(){
+            let date = new Date(this.userdata.created_at)
+            return date.toLocaleString('en-NZ',{year:'numeric',month:'long',day:'numeric'})
+        },
+        birthday:function(){
+             let date = new Date(this.userdata.date_of_birth)
+            return date.toLocaleString('en-NZ',{year:'numeric',month:'long',day:'numeric'})
         }
+
     },
     mounted(){
         this.getuserinfo();

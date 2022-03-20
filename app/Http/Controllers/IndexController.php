@@ -66,7 +66,7 @@ class IndexController extends Controller
       return $images; 
    }
 
-   // * ============== Report ================
+   // * ============== Report  start ================
    public function newReport(Request $request){
       $user = Auth::user();
       if($user){
@@ -122,7 +122,7 @@ class IndexController extends Controller
       
    }
 
-   //* ================== report ========================
+   //* ================== report ends ========================
 
 
 

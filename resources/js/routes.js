@@ -1,3 +1,4 @@
+ // * ==================================== for users ========================================
 import indexpage from "../vue/index"
 import profile from "../vue/components/index/userprofile"
 import joboffers from "../vue/components/userdashboard/userdataview"
@@ -6,11 +7,19 @@ import settings from "../vue/components/userdashboard/settings"
 import userinfo from "../vue/components/userdashboard/userinfo"
 import comments from "../vue/components/index/comments.vue"
 import chat from '../vue/components/userdashboard/chatbox.vue'
-import alert from '../vue/admin/components/alert.vue'
+import galleryManager from '../vue/components/userdashboard/galeryManager.vue'
+import galleryDisplay from '../vue/components/userdashboard/galleydisplay.vue'
+
+ // * ==================================== for Amins ========================================
+ import adminformlayout from '../vue/admin/components/adminDashboard/dashboard.vue'
+
+
+
 export default{
     mode: 'history',
 
     routes:[
+        // * ==================================== for users ========================================
         {
             path: '/',
             component:indexpage,
@@ -49,11 +58,22 @@ export default{
             component:chat,
             name:'chat'
         },
-        // ! to remove after finishing
         {
-            path:'/alert', 
-            component:alert,
+            path:'/galery',
+            component:galleryManager,
+            name:'galleryManager'
         },
+        {
+            path:'/portfolio',
+            component:galleryDisplay,
+            name:'galleryDisplay'
+        },
+         // * ==================================== for Admins ========================================
+        {
+            path:'/admin',
+            component:adminformlayout
+        }
+       
 
     ] 
 

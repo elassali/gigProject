@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 class AuthenticateController extends Controller
 {
     public function login(Request $request){
@@ -18,8 +20,10 @@ class AuthenticateController extends Controller
          ])){ 
              return response([
                  "message" => "Email Or Password is Incorect",
-             ], Response::HTTP_UNAUTHORIZED );
+                 "status" => Response::HTTP_UNAUTHORIZED
+             ]);
          }
+
         $user = Auth::user();
         $token = $user->createToken('token')->plainTextToken; 
 
@@ -42,10 +46,25 @@ class AuthenticateController extends Controller
 //! ================================
     public function account(){
         $user = Auth::user();
-        $profession = $user->userprofession;
-        $allprofession = Profession::all();
-        $profilePicture = "/images/profileImages/".$user->image->url;
-        return ['data' => $user,'userprofession' =>$profession, 'allprofession' => $allprofession, 'profilePicture' => $profilePicture];
+        $data = array();
+        if($user){
+            $profession = $user->userprofession;
+            $profilePicture = "/images/profileImages/".$user->image->url;
+            $user = DB::table('users')
+                        ->where('id',$user->id)
+                        ->select('name','lastname','city','created_at','email','phone','username','date_of_birth')
+                        ->first();
+            
+            $allprofession = Profession::all();
+           
+        }
+           
+        return response([
+                'user' => $user,
+                'userprofession' =>$profession,
+                'allprofession' => $allprofession,
+                'profilePicture' => $profilePicture
+            ]);
         
      }
 

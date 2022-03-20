@@ -40,11 +40,10 @@
                      <div 
                         v-for="item in selections" :key="item.id"
                         @click="selectedoption(item.id,item.title)"
-
-                        :class=" [selected == item.id ? 'border-teal-600' : '','flex w-full items-center p-2 pl-2 border-transparent bg-white border-l-2 relative hover:bg-teal-600 hover:text-teal-100 hover:border-teal-600']"
+                        :class=" [selected == item.id ? 'border-teal-600' : '','flex w-full items-center p-2 pl-2 border-transparent hover:text-white bg-white border-l-2 relative hover:bg-teal-600 hover:text-teal-100 hover:border-teal-600']"
                      >
                             <div class="w-full items-center flex">
-                                    <div class="mx-2 leading-6  "> {{item.title}} </div>
+                                    <div class="mx-2 leading-6 text-black "> {{item.title}} </div>
                             </div>
                     </div>
                 </div>
@@ -80,7 +79,7 @@ export default {
             isopen:false,
             selected:'',
             filtered_data:'',
-            value:'',   
+            value:'Select You Profession',   
         }
     },
     methods:{

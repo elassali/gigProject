@@ -8,6 +8,7 @@ window.Vue = require('vue').default;
 //------------ Router ---------------
 import VueRouter from 'vue-router'
 import routes from './routes'
+import 'animate.css'
 Vue.use(VueRouter)
 
 

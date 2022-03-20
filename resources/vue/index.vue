@@ -52,7 +52,6 @@ export default {
         'c-footer' : footer
     },
  
-   props:["users"],
    data(){
        return{
            isloginopen:false,

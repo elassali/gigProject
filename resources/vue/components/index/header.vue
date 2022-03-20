@@ -34,7 +34,7 @@
                 <div class="items-center md:flex">
                     <div class="flex items-center py-2 -mx-1 md:mx-0">
                         <a class="block cursor-pointer w-1/2 px-3 py-2 mx-1 text-sm font-medium leading-5 text-center text-white transition-colors duration-200 transform bg-gray-500 rounded-md hover:bg-blue-600 md:mx-2 md:w-auto" v-on:click="isopen(1)">Login</a>
-                        <a class="block w-1/2 px-3 py-2 mx-1 text-sm font-medium leading-5 text-center text-white transition-colors duration-200 transform bg-gray-500 rounded-md hover:bg-blue-600 md:mx-0 md:w-auto" v-on:click="isopen(2)">Join free</a>
+                        <a class="block cursor-pointer w-1/2 px-3 py-2 mx-1 text-sm font-medium leading-5 text-center text-white transition-colors duration-200 transform bg-gray-500 rounded-md hover:bg-blue-600 md:mx-0 md:w-auto" v-on:click="isopen(2)">Join free</a>
                     </div>
                     
                 </div>
@@ -77,14 +77,14 @@
             <div class="flex items-center justify-between mt-4">
                 <span class="w-1/5 border-b dark:border-gray-600 lg:w-1/4"></span>
 
-                <a href="#" class="text-xs text-center text-gray-500 uppercase dark:text-gray-400 hover:underline">or login with email</a>
+                <a  class="text-xs text-center text-gray-500 uppercase dark:text-gray-400 hover:underline">or login with email</a>
 
                 <span class="w-1/5 border-b dark:border-gray-400 lg:w-1/4"></span>
             </div>
 
             <div class="mt-4">
                 <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200">Email Address</label>
-                <input v-model="email" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" type="email">
+                <input requiered v-model="email" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" type="email">
             </div>
 
             <div class="mt-4">
@@ -92,8 +92,19 @@
                     <label class="block mb-2 text-sm font-medium text-gray-600 dark:text-gray-200" for="loggingPassword">Password</label>
                     <a @click="isopen(3)" class="text-xs text-gray-500 dark:text-gray-300 hover:underline cursor-pointer">Forget Password?</a>
                 </div>
-
-                <input v-model="password" class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300" type="password">
+                <div class="relative">
+                    <input
+                    :type=" passwordToggle ? 'password' : 'text' "
+                     v-model="password" 
+                     class="block w-full px-4 py-2 text-gray-700 bg-white border rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring focus:ring-blue-300">
+                    <div 
+                    @click="passwordToggle = !passwordToggle"
+                    class="flex absolute inset-y-0 right-0 items-center pr-3 cursor-pointer">
+                        <svg class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
+                    </div>
+                </div>
+                <!-- // ! Error label -->
+                <p :class=" erroMessage .length > 0 ?  'mt-2 text-sm text-red-600 dark:text-red-500 text-center' : 'hidden'">{{erroMessage}}</p>
             </div>
 
             <div class="mt-8">
@@ -275,7 +286,9 @@ export default {
            email:undefined,
            password:undefined,
            username:undefined,
-           isconnected:undefined
+           isconnected:undefined,
+           erroMessage:false,
+           passwordToggle:false
        }
    },
     methods:{
@@ -289,7 +302,9 @@ export default {
                     email:this.email,
                     password:this.password,
                     })
-                    .then(r => r.status == 200 ?  [this.$router.go(), console.log(r) ] : '')
+                    .then(response => {
+                        response.data.status == 401 ?   this.erroMessage = response.data.message : [this.$router.go(), console.log(response)]
+                    })
                     .catch(e => console.log(e))
                 });
             
