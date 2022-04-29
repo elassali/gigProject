@@ -20,7 +20,7 @@ class AuthenticateController extends Controller
          ])){ 
              return response([
                  "message" => "Email Or Password is Incorect",
-                 "status" => Response::HTTP_UNAUTHORIZED
+                 "status" => Response::HTTP_UNAUTHORIZED // 401 
              ]);
          }
 

@@ -89,6 +89,9 @@ class User extends Authenticatable
     public function city(){
         return $this->hasOne('title','city');
     }
+    public function roles(){
+        return $this->belongsToMany(Role::class,'user_roles');
+    }
     // * get user conversation
     public function conversations(){
         return $this->hasMany(Conversation::class,'recipent','id');

@@ -298,7 +298,7 @@ export default {
         },
         login:function(){
             axios.get('sanctum/csrf-cookie').then(response => {
-                    axios.post('api/login',{
+                    axios.post('/api/login',{
                     email:this.email,
                     password:this.password,
                     })

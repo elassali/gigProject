@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\admin\UsersController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\AuthenticateController;
 use App\Http\Controllers\CityController;
@@ -25,7 +26,13 @@ use League\CommonMark\Extension\CommonMark\Node\Block\IndentedCode;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+// ! admin previleges only
+Route::get('/admin/allusers',[UsersController::class,'getAllusers']);
+// Route::middleware('adminAuthorization:api')->group(function() { 
 
+
+
+// });
 // ! Protected Routes 
 Route::middleware('auth:sanctum')->group(function() { 
     Route::get('/signout',[AuthenticateController::class,'logoutuser']);

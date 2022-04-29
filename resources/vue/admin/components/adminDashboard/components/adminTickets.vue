@@ -1,8 +1,4 @@
 <template>
-
-
-
-
 <!-- //! users data table -->
  <!-- component -->
 <div class="overflow-x-auto w-full">
@@ -48,39 +44,37 @@
                     <table class="min-w-max w-full table-auto">
                         <thead>
                             <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-                                <th class="py-3 px-6 text-left">User Name</th>
-                                <th class="py-3 px-6 text-left">Full Name</th>
-                                <th class="py-3 px-6 text-center">Date Of Birth</th>
-                                <th class="py-3 px-6 text-center">last session</th>
+                                <th class="py-3 px-6 text-left">Ticket ID</th>
+                                <th class="py-3 px-6 text-left">Belongs To</th>
+                                <th class="py-3 px-6 text-center">Created Date</th>
+                                <th class="py-3 px-6 text-center">last update Date</th>
                                 <th class="py-3 px-6 text-center">Status</th>
                                 <th class="py-3 px-6 text-center">Actions</th>
                             </tr>
                         </thead>
-
                         <tbody class="text-gray-600 text-sm font-light">
-
-                            <tr v-for="user in users" class="border-b border-gray-200 hover:bg-gray-100">
+                            <tr class="border-b border-gray-200 hover:bg-gray-100">
+                                <td class="py-3 px-6 text-left whitespace-nowrap">
+                                    <div class="flex items-center">
+                                        <span class="font-medium">3WxHmiZYWMHg4h6</span>
+                                    </div>
+                                </td>
                                 <td class="py-3 px-6 text-left">
                                     <div class="flex items-center">
                                         <div class="mr-2">
-                                            <img class="w-6 h-6 rounded-full" :src="user.profilePicture"/>
+                                            <img class="w-6 h-6 rounded-full" src="https://randomuser.me/api/portraits/men/1.jpg"/>
                                         </div>
-                                        <span>{{user.username}}</span>
+                                        <span>Eshal Rosas</span>
                                     </div>
                                 </td>
-                                <td class="py-3 px-6 text-left">
-                                    <div class="flex items-center">
-                                        <span>{{user.fullname}}</span>
-                                    </div>
-                                </td>
-                                <td class="py-3 px-6 text-center">
+                               <td class="py-3 px-6 text-left">
                                     <div class="flex items-center justify-center">
-                                        {{ReadableDate(user.date_of_birth)}}
+                                        <span class="font-semibold">1 , Junary, 1997</span>
                                     </div>
                                 </td>
-                                <td class="py-3 px-6 text-center">
+                                 <td class="py-3 px-6 text-left">
                                     <div class="flex items-center justify-center">
-                                        {{ReadableDate(user.last_session)}}
+                                        <span class="font-semibold">1 , Junary, 1997</span>
                                     </div>
                                 </td>
                                 <td class="py-3 px-6 text-center">
@@ -107,7 +101,6 @@
                                     </div>
                                 </td>
                             </tr>
-
                             
                         </tbody>
                     </table>
@@ -115,20 +108,16 @@
                     <div
 						class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
 						<span class="text-xs xs:text-sm text-gray-900">
-                            Showing {{pagination.showingFrom}} to {{pagination.showingTo}} of {{pagination.totalrecorde}} Entries
+                            Showing 1 to 4 of 50 Entries
                         </span>
 						<div class="inline-flex mt-2 xs:mt-0">
 							<button
-                                @click="allusers(pagination.previous)"
-                                :disabled= "pagination.previous  ? false : true "
-                                :class="[pagination.previous ? '' : 'cursor-not-allowed bg-indigo-300' ,'text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l']">
+                                class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l">
                                 Prev
                             </button>
 							&nbsp; &nbsp;
 							<button
-                                @click="allusers(pagination.next)"
-                                :disabled= "pagination.next  ? false : true "
-                                :class="[pagination.next ? '' : 'cursor-not-allowed bg-indigo-300' ,'text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-l']">
+                                class="text-sm text-indigo-50 transition duration-150 hover:bg-indigo-500 bg-indigo-600 font-semibold py-2 px-4 rounded-r">
                                 Next
                             </button>
 						</div>
@@ -143,54 +132,6 @@
 </template>
 <script>
 export default {
-    data(){
-        return{
-            users:undefined,
-            pagination:{
-                totalrecorde:undefined,
-                previous:undefined,
-                current:undefined,
-                next:undefined,
-                showingFrom:undefined,
-                showingTo:undefined,
-            }
-        }
-    },
-    methods: {
-        allusers:function(page = 1 ){
-            axios.get('/api/admin/allusers?page='+page)
-            .then(response => {
-                this.users = response.data.data.data,
-                this.pagination.totalrecorde = response.data.data.total,
-                response.data.data.current_page == 1 ?  this.pagination.previous = null : this.pagination.previous = response.data.data.current_page - 1
-                this.pagination.current = response.data.data.current_page
-                if(response.data.data.current_page < response.data.data.last_page && response.data.data.current_page > 1 ){
-                    this.pagination.next = response.data.data.current_page + 1
-                }
-                else if( response.data.data.current_page == response.data.data.last_page ){
-                    this.pagination.next = null
-                }
-                else{
-                 this.pagination.next = 2
-                }
-                this.pagination.showingFrom = response.data.data.from
-                this.pagination.showingTo = response.data.data.to
-                
-                console.log(response.data.data)
-            })
-            .catch(e => console.log(e))
-        },
-        ReadableDate:function(DOB){
-            let date = new Date(DOB)
-             return date.toLocaleString('en-Nz',{year:'numeric', month:'long' , day:'numeric'})   
-        }
-    },
-    computed:{
-      
-    },
-    mounted() {
-        this.allusers()
-    },
-
+    
 }
 </script>

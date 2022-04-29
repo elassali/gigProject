@@ -11,7 +11,11 @@ import galleryManager from '../vue/components/userdashboard/galeryManager.vue'
 import galleryDisplay from '../vue/components/userdashboard/galleydisplay.vue'
 
  // * ==================================== for Amins ========================================
- import adminformlayout from '../vue/admin/components/adminDashboard/dashboard.vue'
+// import adminformlayout from '../vue/admin/components/adminDashboard/dashboard.vue'
+ import adminformlayout from '../vue/admin/components/adminDashboard/components/adminUsers.vue'
+// import adminformlayout from '../vue/admin/components/adminDashboard/components/adminTickets.vue'
+// import adminformlayout from '../vue/admin/components/adminDashboard/components/adminUsersOffers.vue'
+// import adminformlayout from '../vue/admin/components/adminDashboard/components/adminReports.vue'
 
 
 
@@ -37,7 +41,8 @@ export default{
         },
         {
             path:'/talent-hire',
-            component:talents
+            component:talents,
+            name: 'talents'
         },
         {
             path:'/account',

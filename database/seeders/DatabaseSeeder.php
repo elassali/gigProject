@@ -2,11 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Conversation;
-use App\Models\Portfolio;
-use App\Models\Reportedaccount;
-use App\Models\Ticketdetail;
-use App\Models\Userprofession;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -33,5 +28,7 @@ class DatabaseSeeder extends Seeder
        $this->call(Replyseeder::class);
        $this->call(Conversationseeder::class);
        $this->call(Messageseeder::class);
+       $this->call(Roleseeder::class);
+       $this->call(RoleUserseeder::class);
     }
 }
