@@ -1,11 +1,7 @@
 <template>
-
-
-
-
 <!-- //! users data table -->
  <!-- component -->
-<div class="overflow-x-auto w-full">
+<div class=" relative overflow-x-auto w-full">
         <div class="min-w-screen min-h-screen bg-gray-100 p-2 flex justify-center bg-gray-100 font-sans overflow-hidden">
             <div class="w-full lg:w-6/6">
 
@@ -84,24 +80,35 @@
                                     </div>
                                 </td>
                                 <td class="py-3 px-6 text-center">
-                                    <span class="bg-purple-200 text-purple-600 py-1 px-3 rounded-full text-xs">Active</span>
+                                    <span :class="[user.isrestricted ? 'bg-red-600' : 'bg-green-600' ,'font-medium  text-purple-200 py-1 px-3 rounded-full text-xs']">
+                                        {{user.isrestricted ? 'Suspended' : 'Active'}}
+                                    </span>
                                 </td>
                                 <td class="py-3 px-6 text-center">
                                     <div class="flex item-center justify-center">
-                                        <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <a 
+                                        :href="'/profile?username='+user.username"
+                                        target="_blank"
+                                        class="cursor-pointer w-4 mr-3 transform hover:text-purple-500 hover:scale-110">
+                                            <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                                             </svg>
-                                        </div>
-                                        <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
+                                            
+                                        </a>
+                                        <div class=" cursor-pointer  w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                                             </svg>
                                         </div>
-                                        <div class="w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
-                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        <div
+                                    @click="[deleteconfirmation = true,userid = user.id]" 
+                                        class=" cursor-pointer  w-4 mr-2 transform hover:text-purple-500 hover:scale-110">
+                                            <svg v-show="!user.isrestricted" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 20 20" fill="currentColor">
+                                             <path fill-rule="evenodd" d="M13.477 14.89A6 6 0 015.11 6.524l8.367 8.368zm1.414-1.414L6.524 5.11a6 6 0 018.367 8.367zM18 10a8 8 0 11-16 0 8 8 0 0116 0z" clip-rule="evenodd" />
+                                            </svg>
+                                            <svg v-show="user.isrestricted" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 20 20" fill="currentColor">
+                                             <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
                                             </svg>
                                         </div>
                                     </div>
@@ -137,12 +144,30 @@
                 </div>
             </div>
         </div>
+            <c-confirmation
+                :showConfirmation="deleteconfirmation"
+                :text="'after your confirmation user will be suspended '"
+                v-on:cancelActon="confirmation"
+                v-on:confirmActon="confirmation"
+            >
+            </c-confirmation>
+            <c-alert
+            :called="alertCall"
+            :text="alertText"
+            >
+            </c-alert>
     </div>   
 
 
 </template>
 <script>
+import confirmation from '../../confirmationModal'
+import alert from '../../alert'
 export default {
+    components:{
+        'c-confirmation' : confirmation,
+        'c-alert' : alert
+    },
     data(){
         return{
             users:undefined,
@@ -153,7 +178,12 @@ export default {
                 next:undefined,
                 showingFrom:undefined,
                 showingTo:undefined,
-            }
+            },
+            deleteconfirmation:false,
+            alertCall:false,
+            alertText:undefined,
+            userid:undefined
+
         }
     },
     methods: {
@@ -183,7 +213,49 @@ export default {
         ReadableDate:function(DOB){
             let date = new Date(DOB)
              return date.toLocaleString('en-Nz',{year:'numeric', month:'long' , day:'numeric'})   
-        }
+        },
+        banuser:function(userid){ //* restrict or unrestrict user
+            try{
+               let index =  this.users.findIndex(object =>{
+                    return object.id == userid
+                })
+                if(this.users[index].isrestricted)
+                {
+                    console.log(userid)
+                    axios.post('/api/admin/unsuspenduser',{userID:userid })
+                    .then(response => {
+                        console.log(response)
+                        response.data.status == 201 ? this.users[index].isrestricted = 0 : console.log("error")
+                        
+                    })
+                    
+                }else{
+                    console.log(userid)
+                    axios.post('/api/admin/suspenduser',{userID:userid })
+                    .then(response => {
+                        console.log(response)
+                        this.users[index].isrestricted = 1
+                    })
+                }        
+                
+                
+            }catch(e){
+                console.log(e)
+            }
+        },
+        confirmation:function(value){
+            if(value){
+                this.deleteconfirmation = false
+                this.banuser(this.userid)
+                this.alertText="User succefully suspended"
+                this.alertCall = true
+                setTimeout(() => {   this.alertCall = false; }, 1500) 
+
+            }
+            else{
+                this.deleteconfirmation = false
+            }
+        },
     },
     computed:{
       

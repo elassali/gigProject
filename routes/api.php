@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\admin\UsersController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\AuthenticateController;
 use App\Http\Controllers\CityController;
@@ -15,6 +14,9 @@ use App\Http\Controllers\GalleryManagerController;
 use App\Http\Middleware\Authenticate;
 use Laravel\Sanctum\Sanctum;
 use League\CommonMark\Extension\CommonMark\Node\Block\IndentedCode;
+//* ############# Admin controller in use 
+use App\Http\Controllers\admin\UsersController;
+use App\Http\Controllers\admin\OffersController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +30,10 @@ use League\CommonMark\Extension\CommonMark\Node\Block\IndentedCode;
 */
 // ! admin previleges only
 Route::get('/admin/allusers',[UsersController::class,'getAllusers']);
+Route::post('/admin/suspenduser',[UsersController::class,'suspendUser']);
+Route::post('/admin/unsuspenduser',[UsersController::class,'unsuspendUser']);
+// ? offers admin 
+Route::get('/admin/offers',[OffersController::class,'getalloffers']);
 // Route::middleware('adminAuthorization:api')->group(function() { 
 
 

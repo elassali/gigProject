@@ -126,6 +126,19 @@
 </template>
 <script>
 export default {
-    
+    data(){
+        return{
+
+        }
+    },
+    methods:{
+        allOffers:function(){
+            axios.get('/api/admin/offers')
+                 .then(response => console.log(response))  
+        }
+    },
+    mounted(){
+        this.allOffers()
+    }
 }
 </script>

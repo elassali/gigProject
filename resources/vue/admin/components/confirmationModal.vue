@@ -15,6 +15,23 @@
 
         //? deleteconfirmation => data variable to emutate showConfirmation 
         // ? confirmation => function to handle delete or cancel action
+        //! example of function 
+        confirmation:function(value){
+            if(value){
+                axios.delete('/api/user/profession/deleteconfirmed',{data:{professionID:this.jobToDeleteAfetrConfirmation}})
+                     .then(response => {
+                         console.log(response)
+                        response.data.status == 202 ? this.userprofession.splice(this.professionIndex,1) : '',
+                        this.deleteconfirmation = false
+                        this.alertText="Profession Deleted"
+                        this.alertCall = true
+                        setTimeout(() => {   this.alertCall = false; }, 1500)
+                     })   
+            }
+            else{
+                this.deleteconfirmation = false
+            }
+        },
 -->
 
 <template>

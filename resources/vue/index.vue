@@ -72,7 +72,7 @@ export default {
     
 }
 </script>
-<style>
+<style scooped>
   <!-- Require css -->
     .scroll-hidden::-webkit-scrollbar {
         height: 0px;

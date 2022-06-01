@@ -15,8 +15,11 @@ class UsersController extends Controller
         if( Auth::check() ){
             $defaultProfilePicture = '/images/profileImages/default_profile_picture.jpg';
             $users = DB::table('users')
-                         ->join('images','users.id','=','images.imageable_id')
-                         ->select(DB::raw("CONCAT(users.name,' ',users.lastname) AS fullname"),'users.username','users.date_of_birth','users.last_session','users.isrestricted','images.url AS profilePicture')
+                         ->join('images',function($join){
+                            $join->on('users.id','=','images.imageable_id')
+                                ->where('images.imageable_type','=','App\Models\User');
+                         })
+                         ->select(DB::raw("CONCAT(users.name,' ',users.lastname) AS fullname"),'users.id','users.username','users.date_of_birth','users.last_session','users.isrestricted','images.url AS profilePicture')
                          ->paginate(15);
          
             return response([
@@ -32,9 +35,9 @@ class UsersController extends Controller
         
     }
 
-    public function suspendUser($request){
+    public function suspendUser(Request $request){
         if(Auth::user()){
-            $userId = $request['userId'];
+            $userId = $request['userID'];
             $user = User::find($userId);
             if($user){
                 $user->isrestricted = true;
@@ -54,10 +57,11 @@ class UsersController extends Controller
                 'status' => Response::HTTP_UNAUTHORIZED //? not authorized 401
             ]);
         }
+        
     }
-    public function unsuspendUser($request){
+    public function unsuspendUser(Request $request){
         if(Auth::user()){
-            $userId = $request['userId'];
+            $userId = $request['userID'];
             $user = User::find($userId);
             if($user){
                 $user->isrestricted = false;

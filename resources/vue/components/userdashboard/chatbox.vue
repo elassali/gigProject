@@ -239,6 +239,7 @@ export default {
                 }).then(response => {
                          this.messages.push(response.data),
                          this.messageBody = ''
+                         console.log(response)
 
                 })
             }
