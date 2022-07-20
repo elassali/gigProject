@@ -8,9 +8,28 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Offer;
 use App\Models\Offerdetail;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class OfferController extends Controller
 {
+    public function getAllOffers(){
+        $offers = DB::table('offers')
+                    ->join('offerdetails','offers.id','=','offerdetails.offer_id')
+                    ->join('professions','offerdetails.profession_id','=','professions.id')
+                    ->join('cities','offerdetails.location_id','=','cities.id')
+                    ->join('users','offers.user_id','=','users.id')
+                    ->join('images',function($join){
+                        $join->on('users.id','=','images.imageable_id')
+                             ->where('images.imageable_type','=','App\Models\User');
+                    })
+                    ->select(DB::raw("CONCAT(users.name,' ',users.lastname) AS fullname"),
+                    'users.id','offers.id','offers.created_at','offers.offer_status','images.url AS profilepicture',
+                    'professions.title As profession','offerdetails.offer_title','offerdetails.description','cities.title As location' )
+                    ->get();
+        return $offers;
+    }
+
+
     public function createnewoffre(Request $request){
         
 

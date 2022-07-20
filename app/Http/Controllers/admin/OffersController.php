@@ -18,7 +18,7 @@ class OffersController extends Controller
                         $join->on('users.id','=','images.imageable_id')
                              ->where('images.imageable_type','=','App\Models\User');
                     })
-                    ->select(DB::raw("CONCAT(users.name,' ',users.lastname) AS fullname"),'users.id','offers.id','offers.created_at','offers.offer_status','images.url AS profilepicture' )
+                    ->select(DB::raw("CONCAT(users.name,' ',users.lastname) AS fullname"),'users.id','offers.id','offers.created_at','offers.offer_status','images.url AS profilepicture')
                     ->get();
         return $offers;                    
         // 

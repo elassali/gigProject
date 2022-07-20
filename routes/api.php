@@ -121,6 +121,7 @@ Route::get('/talents',[IndexController::class,'talents']);
 Route::get('/filter-talents',[IndexController::class,'filtertalents']);
 Route::post('/login',[AuthenticateController::class,'login']);
 Route::post('/register',[AuthenticateController::class,'create']);
+Route::get('/Job-Offers',[OfferController::class,'getAllOffers']);
 
 // ! check if user is logged in
 Route::get('/check',[AuthenticateController::class,'checkiflogedin']);

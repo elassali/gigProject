@@ -137,7 +137,10 @@ export default {
         },
         // * Get all users with profession
         gettalents:function(){
-            axios.get('/api/talents').then(response => [ this.users = response.data, console.log(response)] )
+            axios.get('/api/talents').then(response => { 
+                this.users = response.data,
+                console.log(response)
+                 })
         },
         // * filter users 
         filterusers:function(){
